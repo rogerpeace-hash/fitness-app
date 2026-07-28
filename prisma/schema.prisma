@@ -1,0 +1,233 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// --- Auth.js (NextAuth v5) tables ---
+// https://authjs.dev/getting-started/adapters/prisma
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+
+  accounts Account[]
+  sessions Session[]
+
+  bodyMetrics    BodyMetric[]
+  inBodyScans    InBodyScan[]
+  bloodworkPanels BloodworkPanel[]
+  nutritionLogs  NutritionLog[]
+  workouts       Workout[]
+  dailyActivities DailyActivity[]
+  goals          Goal[]
+  importPresets  ImportPreset[]
+
+  createdAt DateTime @default(now())
+}
+
+model Account {
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([provider, providerAccountId])
+}
+
+model Session {
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+
+  @@id([identifier, token])
+}
+
+// --- Health data model ---
+
+enum DataSource {
+  MANUAL
+  IMPORT
+}
+
+model BodyMetric {
+  id          String     @id @default(cuid())
+  userId      String
+  date        DateTime
+  weightKg    Float
+  bodyFatPct  Float?
+  source      DataSource @default(MANUAL)
+  sourceLabel String?
+  notes       String?
+  createdAt   DateTime   @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+}
+
+model InBodyScan {
+  id                   String   @id @default(cuid())
+  userId               String
+  date                 DateTime
+  weightKg             Float
+  skeletalMuscleMassKg Float?
+  bodyFatMassKg        Float?
+  bodyFatPct           Float?
+  visceralFatLevel     Float?
+  bmr                  Int?
+  notes                String?
+  createdAt            DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+}
+
+model BloodworkPanel {
+  id        String            @id @default(cuid())
+  userId    String
+  date      DateTime
+  labName   String?
+  notes     String?
+  createdAt DateTime          @default(now())
+
+  user    User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  markers BloodworkMarker[]
+
+  @@index([userId, date])
+}
+
+model BloodworkMarker {
+  id       String  @id @default(cuid())
+  panelId  String
+  name     String
+  value    Float
+  unit     String?
+  refLow   Float?
+  refHigh  Float?
+
+  panel BloodworkPanel @relation(fields: [panelId], references: [id], onDelete: Cascade)
+
+  @@index([panelId])
+  @@index([name])
+}
+
+model NutritionLog {
+  id        String     @id @default(cuid())
+  userId    String
+  date      DateTime
+  calories  Float
+  proteinG  Float?
+  carbsG    Float?
+  fatG      Float?
+  sodiumMg  Float?
+  sugarG    Float?
+  source    DataSource @default(MANUAL)
+  createdAt DateTime   @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+}
+
+model Workout {
+  id              String     @id @default(cuid())
+  userId          String
+  date            DateTime
+  type            String
+  durationMin     Float
+  caloriesBurned  Float?
+  distanceKm      Float?
+  source          DataSource @default(MANUAL)
+  createdAt       DateTime   @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+}
+
+model DailyActivity {
+  id               String   @id @default(cuid())
+  userId           String
+  date             DateTime
+  steps            Int?
+  activeCalories   Float?
+  exerciseMinutes  Float?
+  createdAt        DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
+}
+
+enum GoalType {
+  WEIGHT
+  BODY_FAT
+  EXERCISE
+}
+
+enum GoalStatus {
+  ACTIVE
+  ACHIEVED
+  ABANDONED
+}
+
+model Goal {
+  id          String     @id @default(cuid())
+  userId      String
+  type        GoalType
+  startValue  Float
+  startDate   DateTime
+  targetValue Float
+  targetDate  DateTime?
+  status      GoalStatus @default(ACTIVE)
+  notes       String?
+  createdAt   DateTime   @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, status])
+}
+
+enum ImportDataType {
+  BODY_METRIC
+  NUTRITION_LOG
+  WORKOUT
+  DAILY_ACTIVITY
+}
+
+model ImportPreset {
+  id             String         @id @default(cuid())
+  userId         String
+  name           String
+  dataType       ImportDataType
+  columnMapping  Json
+  createdAt      DateTime       @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, name])
+}
