@@ -29,6 +29,7 @@ model User {
   goals          Goal[]
   importPresets  ImportPreset[]
   journalEntries JournalEntry[]
+  chatMessages   ChatMessage[]
 
   createdAt DateTime @default(now())
 }
@@ -227,6 +228,18 @@ model JournalEntry {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, date])
+}
+
+model ChatMessage {
+  id        String   @id @default(cuid())
+  userId    String
+  role      String // "user" | "assistant"
+  content   String   @db.Text
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, createdAt])
 }
 
 model DailyActivity {
