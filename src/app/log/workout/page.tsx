@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { requireUserId } from "@/lib/auth-helpers";
-import { createWorkout } from "@/lib/actions/workout";
+import { DEVICE_METRIC_FIELDS } from "@/lib/device-fields";
+import WorkoutForm from "./WorkoutForm";
 
 export default async function WorkoutLogPage({
   searchParams,
@@ -16,6 +17,16 @@ export default async function WorkoutLogPage({
     take: 20,
   });
 
+  const metricsSummary = (w: (typeof workouts)[number]) => {
+    if (!w.trackedWith) return null;
+    const fieldDefs = DEVICE_METRIC_FIELDS[w.trackedWith] ?? [];
+    const metrics = (w.metrics as Record<string, number> | null) ?? {};
+    const parts = fieldDefs
+      .filter((f) => metrics[f.key] !== undefined)
+      .map((f) => `${f.label}: ${metrics[f.key]}`);
+    return parts.length > 0 ? parts.join(" · ") : null;
+  };
+
   return (
     <div className="flex flex-col gap-8">
       <h1 className="text-2xl font-semibold">Workouts</h1>
@@ -26,94 +37,45 @@ export default async function WorkoutLogPage({
         </p>
       )}
 
-      <form action={createWorkout} className="grid max-w-xl grid-cols-2 gap-4">
-        <label className="flex flex-col gap-1 text-sm">
-          Date
-          <input
-            type="date"
-            name="date"
-            required
-            defaultValue={new Date().toISOString().slice(0, 10)}
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-sm">
-          Type
-          <input
-            type="text"
-            name="type"
-            required
-            placeholder="e.g. Run, Lift, Yoga"
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-sm">
-          Duration (min)
-          <input
-            type="number"
-            step="1"
-            name="durationMin"
-            required
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-sm">
-          Calories burned (optional)
-          <input
-            type="number"
-            step="1"
-            name="caloriesBurned"
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
-          />
-        </label>
-        <label className="col-span-2 flex flex-col gap-1 text-sm">
-          Distance (km, optional)
-          <input
-            type="number"
-            step="0.01"
-            name="distanceKm"
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
-          />
-        </label>
-        <button
-          type="submit"
-          className="col-span-2 w-fit rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
-        >
-          Save workout
-        </button>
-      </form>
+      <WorkoutForm />
 
       <div>
         <h2 className="mb-3 text-lg font-medium">Recent workouts</h2>
-        <table className="w-full text-sm">
-          <thead>
-            <tr className="border-b border-zinc-200 text-left dark:border-zinc-800">
-              <th className="py-2 pr-4">Date</th>
-              <th className="py-2 pr-4">Type</th>
-              <th className="py-2 pr-4">Duration</th>
-              <th className="py-2 pr-4">Calories</th>
-              <th className="py-2 pr-4">Distance</th>
-            </tr>
-          </thead>
-          <tbody>
-            {workouts.map((w) => (
-              <tr key={w.id} className="border-b border-zinc-100 dark:border-zinc-900">
-                <td className="py-2 pr-4">{w.date.toISOString().slice(0, 10)}</td>
-                <td className="py-2 pr-4">{w.type}</td>
-                <td className="py-2 pr-4">{w.durationMin} min</td>
-                <td className="py-2 pr-4">{w.caloriesBurned ?? "—"}</td>
-                <td className="py-2 pr-4">{w.distanceKm ?? "—"}</td>
+        <div className="overflow-x-auto">
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="border-b border-zinc-200 text-left dark:border-zinc-800">
+                <th className="py-2 pr-4">Date</th>
+                <th className="py-2 pr-4">Type</th>
+                <th className="py-2 pr-4">Duration</th>
+                <th className="py-2 pr-4">Calories</th>
+                <th className="py-2 pr-4">Distance</th>
+                <th className="py-2 pr-4">Device</th>
+                <th className="py-2 pr-4">Metrics</th>
               </tr>
-            ))}
-            {workouts.length === 0 && (
-              <tr>
-                <td colSpan={5} className="py-4 text-zinc-500">
-                  No workouts yet.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {workouts.map((w) => (
+                <tr key={w.id} className="border-b border-zinc-100 dark:border-zinc-900">
+                  <td className="py-2 pr-4">{w.date.toISOString().slice(0, 10)}</td>
+                  <td className="py-2 pr-4">{w.type}</td>
+                  <td className="py-2 pr-4">{w.durationMin} min</td>
+                  <td className="py-2 pr-4">{w.caloriesBurned ?? "—"}</td>
+                  <td className="py-2 pr-4">{w.distanceKm ?? "—"}</td>
+                  <td className="py-2 pr-4">{w.trackedWith ?? "—"}</td>
+                  <td className="py-2 pr-4 text-zinc-500">{metricsSummary(w) ?? "—"}</td>
+                </tr>
+              ))}
+              {workouts.length === 0 && (
+                <tr>
+                  <td colSpan={7} className="py-4 text-zinc-500">
+                    No workouts yet.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   );

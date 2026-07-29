@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Link from "next/link";
 import { auth, signOut } from "@/auth";
+import DailyVerseModal from "./DailyVerseModal";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -37,6 +38,7 @@ const navLinks = [
   { href: "/", label: "Dashboard" },
   { href: "/log/weight", label: "Weight" },
   { href: "/log/workout", label: "Workout" },
+  { href: "/log/journal", label: "Journal" },
   { href: "/log/inbody", label: "InBody" },
   { href: "/log/bloodwork", label: "Bloodwork" },
   { href: "/goals", label: "Goals" },
@@ -56,6 +58,7 @@ export default async function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-zinc-50 dark:bg-black">
+        {session?.user && <DailyVerseModal />}
         {session?.user && (
           <header className="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-black">
             <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4">

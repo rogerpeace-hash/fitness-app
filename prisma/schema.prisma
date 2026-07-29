@@ -28,6 +28,7 @@ model User {
   dailyActivities DailyActivity[]
   goals          Goal[]
   importPresets  ImportPreset[]
+  journalEntries JournalEntry[]
 
   createdAt DateTime @default(now())
 }
@@ -161,12 +162,27 @@ model Workout {
   durationMin     Float
   caloriesBurned  Float?
   distanceKm      Float?
+  trackedWith     String?
+  metrics         Json?
   source          DataSource @default(MANUAL)
   createdAt       DateTime   @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId, date])
+}
+
+model JournalEntry {
+  id            String   @id @default(cuid())
+  userId        String
+  date          DateTime
+  moodRating    Int?
+  entry         String?
+  createdAt     DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, date])
 }
 
 model DailyActivity {
