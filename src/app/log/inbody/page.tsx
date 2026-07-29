@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { requireUserId } from "@/lib/auth-helpers";
-import { createInBodyScan, importInBodyCsv } from "@/lib/actions/inbody";
+import { createInBodyScan, importInBodyCsv, deleteInBodyScan } from "@/lib/actions/inbody";
 
 const numberField = (
   label: string,
@@ -123,6 +123,7 @@ export default async function InBodyLogPage({
                 <th className="py-2 pr-4">Visceral</th>
                 <th className="py-2 pr-4">Score</th>
                 {hasSegmentalData && <th className="py-2 pr-4">Segmental</th>}
+                <th className="py-2 pr-4"></th>
               </tr>
             </thead>
             <tbody>
@@ -142,11 +143,18 @@ export default async function InBodyLogPage({
                         : "—"}
                     </td>
                   )}
+                  <td className="py-2 pr-4">
+                    <form action={deleteInBodyScan.bind(null, scan.id)}>
+                      <button type="submit" className="text-xs text-red-600 underline dark:text-red-400">
+                        Delete
+                      </button>
+                    </form>
+                  </td>
                 </tr>
               ))}
               {scans.length === 0 && (
                 <tr>
-                  <td colSpan={hasSegmentalData ? 8 : 7} className="py-4 text-zinc-500">
+                  <td colSpan={hasSegmentalData ? 9 : 8} className="py-4 text-zinc-500">
                     No scans yet.
                   </td>
                 </tr>

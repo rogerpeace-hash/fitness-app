@@ -49,3 +49,11 @@ export async function createBodyMetric(formData: FormData) {
   revalidatePath("/");
   redirect("/log/weight?saved=1");
 }
+
+export async function deleteBodyMetric(id: string) {
+  const userId = await requireUserId();
+  await prisma.bodyMetric.deleteMany({ where: { id, userId } });
+  revalidatePath("/");
+  revalidatePath("/log/weight");
+  revalidatePath("/log/renpho");
+}

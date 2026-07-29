@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { requireUserId } from "@/lib/auth-helpers";
-import { createBodyMetric } from "@/lib/actions/body-metric";
+import { createBodyMetric, deleteBodyMetric } from "@/lib/actions/body-metric";
 
 export default async function WeightLogPage({
   searchParams,
@@ -110,6 +110,7 @@ export default async function WeightLogPage({
                 <th className="py-2 pr-4">Body fat %</th>
                 <th className="py-2 pr-4">Waist</th>
                 <th className="py-2 pr-4">Source</th>
+                <th className="py-2 pr-4"></th>
               </tr>
             </thead>
             <tbody>
@@ -120,11 +121,18 @@ export default async function WeightLogPage({
                   <td className="py-2 pr-4">{entry.bodyFatPct ?? "—"}</td>
                   <td className="py-2 pr-4">{entry.waistIn ?? "—"}</td>
                   <td className="py-2 pr-4 text-zinc-500">{entry.device ?? "Manual"}</td>
+                  <td className="py-2 pr-4">
+                    <form action={deleteBodyMetric.bind(null, entry.id)}>
+                      <button type="submit" className="text-xs text-red-600 underline dark:text-red-400">
+                        Delete
+                      </button>
+                    </form>
+                  </td>
                 </tr>
               ))}
               {entries.length === 0 && (
                 <tr>
-                  <td colSpan={5} className="py-4 text-zinc-500">
+                  <td colSpan={6} className="py-4 text-zinc-500">
                     No entries yet.
                   </td>
                 </tr>

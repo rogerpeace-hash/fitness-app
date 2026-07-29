@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { requireUserId } from "@/lib/auth-helpers";
 import { createRenphoReading, importRenphoCsv } from "@/lib/actions/renpho";
+import { deleteBodyMetric } from "@/lib/actions/body-metric";
 
 const numberField = (
   label: string,
@@ -108,6 +109,7 @@ export default async function RenphoLogPage({
                 <th className="py-2 pr-4">Skeletal muscle %</th>
                 <th className="py-2 pr-4">Visceral fat</th>
                 <th className="py-2 pr-4">Metabolic age</th>
+                <th className="py-2 pr-4"></th>
               </tr>
             </thead>
             <tbody>
@@ -119,11 +121,18 @@ export default async function RenphoLogPage({
                   <td className="py-2 pr-4">{r.skeletalMusclePct ?? "—"}</td>
                   <td className="py-2 pr-4">{r.visceralFatLevel ?? "—"}</td>
                   <td className="py-2 pr-4">{r.metabolicAge ?? "—"}</td>
+                  <td className="py-2 pr-4">
+                    <form action={deleteBodyMetric.bind(null, r.id)}>
+                      <button type="submit" className="text-xs text-red-600 underline dark:text-red-400">
+                        Delete
+                      </button>
+                    </form>
+                  </td>
                 </tr>
               ))}
               {readings.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="py-4 text-zinc-500">
+                  <td colSpan={7} className="py-4 text-zinc-500">
                     No Renpho readings yet.
                   </td>
                 </tr>

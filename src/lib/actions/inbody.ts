@@ -54,6 +54,13 @@ export async function createInBodyScan(formData: FormData) {
   redirect("/log/inbody?saved=1");
 }
 
+export async function deleteInBodyScan(id: string) {
+  const userId = await requireUserId();
+  await prisma.inBodyScan.deleteMany({ where: { id, userId } });
+  revalidatePath("/");
+  revalidatePath("/log/inbody");
+}
+
 function normalizeKey(s: string): string {
   return s.toLowerCase().replace(/[^a-z0-9]/g, "");
 }
