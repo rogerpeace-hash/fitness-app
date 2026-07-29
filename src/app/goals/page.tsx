@@ -1,6 +1,7 @@
 import { prisma } from "@/lib/prisma";
 import { requireUserId } from "@/lib/auth-helpers";
-import { createGoal, updateGoalStatus } from "@/lib/actions/goals";
+import { updateGoalStatus } from "@/lib/actions/goals";
+import GoalForm from "./GoalForm";
 
 const typeLabels: Record<string, string> = {
   WEIGHT: "Weight (kg)",
@@ -43,73 +44,7 @@ export default async function GoalsPage({
         </p>
       )}
 
-      <form action={createGoal} className="grid max-w-xl grid-cols-2 gap-4">
-        <label className="flex flex-col gap-1 text-sm">
-          Type
-          <select
-            name="type"
-            required
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
-          >
-            <option value="WEIGHT">Weight</option>
-            <option value="BODY_FAT">Body fat %</option>
-            <option value="EXERCISE">Exercise</option>
-          </select>
-        </label>
-        <span />
-        <label className="flex flex-col gap-1 text-sm">
-          Start value
-          <input
-            type="number"
-            step="0.1"
-            name="startValue"
-            required
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-sm">
-          Start date
-          <input
-            type="date"
-            name="startDate"
-            required
-            defaultValue={new Date().toISOString().slice(0, 10)}
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-sm">
-          Target value
-          <input
-            type="number"
-            step="0.1"
-            name="targetValue"
-            required
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
-          />
-        </label>
-        <label className="flex flex-col gap-1 text-sm">
-          Target date (optional)
-          <input
-            type="date"
-            name="targetDate"
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
-          />
-        </label>
-        <label className="col-span-2 flex flex-col gap-1 text-sm">
-          Notes (optional)
-          <textarea
-            name="notes"
-            rows={2}
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
-          />
-        </label>
-        <button
-          type="submit"
-          className="col-span-2 w-fit rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
-        >
-          Add goal
-        </button>
-      </form>
+      <GoalForm />
 
       <div className="flex flex-col gap-4">
         {goals.map((goal) => {
@@ -131,7 +66,9 @@ export default async function GoalsPage({
                 <span className="text-xs uppercase text-zinc-500">{goal.status}</span>
               </div>
               <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                {goal.startValue} → {goal.targetValue}
+                {goal.type === "EXERCISE"
+                  ? `${goal.targetValue} workouts / week`
+                  : `${goal.startValue} → ${goal.targetValue}`}
                 {goal.targetDate && ` by ${goal.targetDate.toISOString().slice(0, 10)}`}
               </p>
               {pct !== null && (

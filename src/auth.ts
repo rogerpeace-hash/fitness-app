@@ -3,7 +3,12 @@ import Google from "next-auth/providers/google";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { prisma } from "@/lib/prisma";
 
-const allowedEmail = process.env.ALLOWED_EMAIL;
+// ALLOWED_EMAILS is a comma-separated list, e.g. "me@x.com,spouse@x.com".
+// ALLOWED_EMAIL (singular) is kept as a fallback for existing deployments.
+const allowedEmails = (process.env.ALLOWED_EMAILS ?? process.env.ALLOWED_EMAIL ?? "")
+  .split(",")
+  .map((e) => e.trim().toLowerCase())
+  .filter(Boolean);
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
@@ -17,8 +22,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   callbacks: {
     async signIn({ user }) {
-      if (!allowedEmail) return false;
-      return user.email?.toLowerCase() === allowedEmail.toLowerCase();
+      const email = user.email?.toLowerCase();
+      return !!email && allowedEmails.includes(email);
     },
   },
 });

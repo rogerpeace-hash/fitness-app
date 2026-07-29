@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { requireUserId } from "@/lib/auth-helpers";
-import { WeightChart, NutritionChart } from "./DashboardCharts";
+import { WeightChart, NutritionChart, WorkoutWeeklyChart } from "./DashboardCharts";
+import WorkoutHeatmap from "./WorkoutHeatmap";
+import { computeWorkoutStatus, buildHeatmapDays, buildWeeklyBuckets } from "@/lib/workout-status";
 
 const typeLabels: Record<string, string> = {
   WEIGHT: "Weight (kg)",
@@ -17,7 +19,10 @@ export default async function DashboardPage() {
   const since14d = new Date();
   since14d.setDate(since14d.getDate() - 14);
 
-  const [weightEntries, nutritionByDay, activeGoals, latestScan] = await Promise.all([
+  const since84d = new Date();
+  since84d.setDate(since84d.getDate() - 84);
+
+  const [weightEntries, nutritionByDay, activeGoals, latestScan, recentWorkouts] = await Promise.all([
     prisma.bodyMetric.findMany({
       where: { userId, date: { gte: since90d } },
       orderBy: { date: "asc" },
@@ -37,7 +42,27 @@ export default async function DashboardPage() {
       where: { userId },
       orderBy: { date: "desc" },
     }),
+    prisma.workout.findMany({
+      where: { userId, date: { gte: since84d } },
+      orderBy: { date: "asc" },
+      select: { date: true },
+    }),
   ]);
+
+  const exerciseGoal = activeGoals.find((g) => g.type === "EXERCISE") ?? null;
+  const weeklyTarget = exerciseGoal ? exerciseGoal.targetValue : null;
+  const workoutDates = recentWorkouts.map((w) => w.date);
+  const workoutStatusResult = computeWorkoutStatus(workoutDates, weeklyTarget);
+  const heatmapDays = buildHeatmapDays(workoutDates, 84);
+  const weeklyBuckets = buildWeeklyBuckets(workoutDates, weeklyTarget, 12);
+
+  const statusStyles: Record<string, { dot: string; label: string; text: string }> = {
+    green: { dot: "bg-green-500", label: "On track", text: "text-green-700 dark:text-green-400" },
+    yellow: { dot: "bg-yellow-500", label: "Catching up", text: "text-yellow-700 dark:text-yellow-400" },
+    red: { dot: "bg-red-500", label: "Missed 3+ days", text: "text-red-700 dark:text-red-400" },
+    none: { dot: "bg-zinc-400", label: "No weekly goal set", text: "text-zinc-500" },
+  };
+  const workoutStatusStyle = statusStyles[workoutStatusResult.status];
 
   const latestMetric = weightEntries[weightEntries.length - 1];
 
@@ -76,6 +101,47 @@ export default async function DashboardPage() {
       </div>
 
       <section>
+        <div className="mb-3 flex items-center justify-between">
+          <h2 className="text-lg font-medium">Workouts</h2>
+          <Link href="/log/workout" className="text-sm text-zinc-500 underline hover:text-black dark:hover:text-white">
+            Log a workout
+          </Link>
+        </div>
+        <div className="flex flex-col gap-4 rounded-md border border-zinc-200 p-4 dark:border-zinc-800">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <span className={`h-3 w-3 rounded-full ${workoutStatusStyle.dot}`} />
+              <span className={`text-sm font-medium ${workoutStatusStyle.text}`}>
+                {workoutStatusStyle.label}
+              </span>
+            </div>
+            <span className="text-sm text-zinc-500">
+              {workoutStatusResult.currentWeekCount} this week
+              {weeklyTarget ? ` / ${weeklyTarget} goal` : ""}
+              {workoutStatusResult.daysSinceLastWorkout !== null &&
+                ` · last workout ${workoutStatusResult.daysSinceLastWorkout === 0 ? "today" : `${workoutStatusResult.daysSinceLastWorkout}d ago`}`}
+            </span>
+          </div>
+
+          <div className="overflow-x-auto">
+            <WorkoutHeatmap days={heatmapDays} />
+          </div>
+
+          <WorkoutWeeklyChart data={weeklyBuckets} weeklyTarget={weeklyTarget} />
+
+          {!weeklyTarget && (
+            <p className="text-sm text-zinc-500">
+              Set a weekly workout goal on the{" "}
+              <Link href="/goals" className="underline">
+                goals page
+              </Link>{" "}
+              to get a green/yellow/red status here.
+            </p>
+          )}
+        </div>
+      </section>
+
+      <section>
         <h2 className="mb-3 text-lg font-medium">Weight trend (90 days)</h2>
         <WeightChart data={weightChartData} />
       </section>
@@ -111,7 +177,9 @@ export default async function DashboardPage() {
                 <div className="flex items-center justify-between text-sm">
                   <span className="font-medium">{typeLabels[goal.type]}</span>
                   <span className="text-zinc-500">
-                    {goal.startValue} → {goal.targetValue}
+                    {goal.type === "EXERCISE"
+                      ? `${goal.targetValue} workouts / week`
+                      : `${goal.startValue} → ${goal.targetValue}`}
                   </span>
                 </div>
                 {pct !== null && (

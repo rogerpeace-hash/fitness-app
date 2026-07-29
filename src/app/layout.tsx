@@ -36,6 +36,7 @@ export const viewport: Viewport = {
 const navLinks = [
   { href: "/", label: "Dashboard" },
   { href: "/log/weight", label: "Weight" },
+  { href: "/log/workout", label: "Workout" },
   { href: "/log/inbody", label: "InBody" },
   { href: "/log/bloodwork", label: "Bloodwork" },
   { href: "/goals", label: "Goals" },

@@ -8,8 +8,8 @@ import { requireUserId } from "@/lib/auth-helpers";
 
 const schema = z.object({
   type: z.enum(["WEIGHT", "BODY_FAT", "EXERCISE"]),
-  startValue: z.coerce.number(),
-  startDate: z.coerce.date(),
+  startValue: z.coerce.number().optional(),
+  startDate: z.coerce.date().optional(),
   targetValue: z.coerce.number(),
   targetDate: z.coerce.date().optional(),
   notes: z.string().optional(),
@@ -17,10 +17,14 @@ const schema = z.object({
 
 export async function createGoal(formData: FormData) {
   const userId = await requireUserId();
+  const type = formData.get("type");
+  // Exercise goals are a weekly frequency target, not a before/after value,
+  // so the form omits start value/date for them — default instead.
+  const isExercise = type === "EXERCISE";
   const parsed = schema.parse({
-    type: formData.get("type"),
-    startValue: formData.get("startValue"),
-    startDate: formData.get("startDate"),
+    type,
+    startValue: isExercise ? formData.get("startValue") || 0 : formData.get("startValue"),
+    startDate: isExercise ? formData.get("startDate") || new Date() : formData.get("startDate"),
     targetValue: formData.get("targetValue"),
     targetDate: formData.get("targetDate") || undefined,
     notes: formData.get("notes") ?? undefined,
@@ -30,8 +34,8 @@ export async function createGoal(formData: FormData) {
     data: {
       userId,
       type: parsed.type,
-      startValue: parsed.startValue,
-      startDate: parsed.startDate,
+      startValue: parsed.startValue ?? 0,
+      startDate: parsed.startDate ?? new Date(),
       targetValue: parsed.targetValue,
       targetDate: parsed.targetDate,
       notes: parsed.notes || undefined,
