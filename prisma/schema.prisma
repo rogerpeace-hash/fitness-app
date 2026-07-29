@@ -191,6 +191,7 @@ model NutritionLog {
   fatG      Float?
   sodiumMg  Float?
   sugarG    Float?
+  notes     String?
   source    DataSource @default(MANUAL)
   createdAt DateTime   @default(now())
 

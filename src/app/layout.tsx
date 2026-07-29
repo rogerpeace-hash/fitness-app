@@ -38,6 +38,7 @@ const navLinks = [
   { href: "/", label: "Dashboard" },
   { href: "/coach", label: "Coach" },
   { href: "/log/weight", label: "Weight" },
+  { href: "/log/nutrition", label: "Nutrition" },
   { href: "/log/workout", label: "Workout" },
   { href: "/log/journal", label: "Journal" },
   { href: "/log/inbody", label: "InBody" },
