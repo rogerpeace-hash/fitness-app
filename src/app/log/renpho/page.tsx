@@ -15,7 +15,7 @@ const numberField = (
       step={step}
       name={name}
       required={required}
-      className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+      className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
     />
   </label>
 );
@@ -49,23 +49,23 @@ export default async function RenphoLogPage({
         </p>
       )}
 
-      <div className="rounded-md border border-zinc-200 p-4 dark:border-zinc-800">
+      <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <h2 className="mb-2 text-sm font-medium">Import from Renpho app export (CSV)</h2>
-        <p className="mb-3 text-sm text-zinc-500">
+        <p className="mb-3 text-sm text-slate-500">
           In the Renpho app, export your history as CSV and upload it here.
         </p>
         <form action={importRenphoCsv} className="flex flex-wrap items-center gap-3">
           <input type="file" name="file" accept=".csv,text/csv" required className="text-sm" />
           <button
             type="submit"
-            className="rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
+            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
           >
             Import
           </button>
         </form>
       </div>
 
-      <details className="rounded-md border border-zinc-200 p-4 dark:border-zinc-800">
+      <details className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <summary className="cursor-pointer text-sm font-medium">Or enter a reading manually</summary>
         <form action={createRenphoReading} className="mt-4 grid grid-cols-2 gap-4">
           <label className="col-span-2 flex flex-col gap-1 text-sm">
@@ -75,7 +75,7 @@ export default async function RenphoLogPage({
               name="date"
               required
               defaultValue={new Date().toISOString().slice(0, 10)}
-              className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+              className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
             />
           </label>
           {numberField("Weight (lb)", "weightLb", { required: true })}
@@ -90,7 +90,7 @@ export default async function RenphoLogPage({
           {numberField("Metabolic age", "metabolicAge", { step: "1" })}
           <button
             type="submit"
-            className="col-span-2 w-fit rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
+            className="col-span-2 w-fit rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
           >
             Save reading
           </button>
@@ -102,7 +102,7 @@ export default async function RenphoLogPage({
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-200 text-left dark:border-zinc-800">
+              <tr className="border-b border-slate-200 text-left dark:border-slate-800">
                 <th className="py-2 pr-4">Date</th>
                 <th className="py-2 pr-4">Weight</th>
                 <th className="py-2 pr-4">Body fat %</th>
@@ -114,7 +114,7 @@ export default async function RenphoLogPage({
             </thead>
             <tbody>
               {readings.map((r) => (
-                <tr key={r.id} className="border-b border-zinc-100 dark:border-zinc-900">
+                <tr key={r.id} className="border-b border-slate-100 dark:border-slate-900">
                   <td className="py-2 pr-4">{r.date.toISOString().slice(0, 10)}</td>
                   <td className="py-2 pr-4">{r.weightLb.toFixed(1)}</td>
                   <td className="py-2 pr-4">{r.bodyFatPct ?? "—"}</td>
@@ -132,7 +132,7 @@ export default async function RenphoLogPage({
               ))}
               {readings.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="py-4 text-zinc-500">
+                  <td colSpan={7} className="py-4 text-slate-500">
                     No Renpho readings yet.
                   </td>
                 </tr>

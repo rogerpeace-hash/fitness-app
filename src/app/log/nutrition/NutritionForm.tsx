@@ -49,7 +49,7 @@ export default function NutritionForm() {
 
   return (
     <form action={createNutritionLog} className="flex flex-col gap-4 max-w-xl">
-      <div className="flex flex-col gap-2 rounded-md border border-dashed border-zinc-300 p-4 dark:border-zinc-700">
+      <div className="flex flex-col gap-2 rounded-md border border-dashed border-slate-300 p-4 dark:border-slate-700">
         <label className="text-sm font-medium">Snap a meal (optional)</label>
         <input
           ref={fileInputRef}
@@ -63,10 +63,10 @@ export default function NutritionForm() {
           // eslint-disable-next-line @next/next/no-img-element
           <img src={preview} alt="Meal preview" className="mt-2 max-h-48 rounded-md object-cover" />
         )}
-        {analyzing && <p className="text-sm text-zinc-500">Analyzing photo…</p>}
+        {analyzing && <p className="text-sm text-slate-500">Analyzing photo…</p>}
         {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
         {values.description && !analyzing && (
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
+          <p className="text-sm text-slate-600 dark:text-slate-400">
             Identified: {values.description} — review the estimated numbers below before saving.
           </p>
         )}
@@ -81,7 +81,7 @@ export default function NutritionForm() {
           name="date"
           required
           defaultValue={new Date().toISOString().slice(0, 10)}
-          className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+          className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
         />
       </label>
 
@@ -95,7 +95,7 @@ export default function NutritionForm() {
             required
             value={values.calories}
             onChange={(e) => setValues((v) => ({ ...v, calories: e.target.value }))}
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+            className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
@@ -106,7 +106,7 @@ export default function NutritionForm() {
             name="proteinG"
             value={values.proteinG}
             onChange={(e) => setValues((v) => ({ ...v, proteinG: e.target.value }))}
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+            className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
@@ -117,7 +117,7 @@ export default function NutritionForm() {
             name="carbsG"
             value={values.carbsG}
             onChange={(e) => setValues((v) => ({ ...v, carbsG: e.target.value }))}
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+            className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
@@ -128,7 +128,7 @@ export default function NutritionForm() {
             name="fatG"
             value={values.fatG}
             onChange={(e) => setValues((v) => ({ ...v, fatG: e.target.value }))}
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+            className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
@@ -137,7 +137,7 @@ export default function NutritionForm() {
             type="number"
             step="1"
             name="sodiumMg"
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+            className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
@@ -146,14 +146,14 @@ export default function NutritionForm() {
             type="number"
             step="1"
             name="sugarG"
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+            className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
           />
         </label>
       </div>
 
       <button
         type="submit"
-        className="w-fit rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
+        className="w-fit rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
       >
         Save entry
       </button>

@@ -44,7 +44,7 @@ export default async function WorkoutLogPage({
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-200 text-left dark:border-zinc-800">
+              <tr className="border-b border-slate-200 text-left dark:border-slate-800">
                 <th className="py-2 pr-4">Date</th>
                 <th className="py-2 pr-4">Type</th>
                 <th className="py-2 pr-4">Duration</th>
@@ -56,19 +56,19 @@ export default async function WorkoutLogPage({
             </thead>
             <tbody>
               {workouts.map((w) => (
-                <tr key={w.id} className="border-b border-zinc-100 dark:border-zinc-900">
+                <tr key={w.id} className="border-b border-slate-100 dark:border-slate-900">
                   <td className="py-2 pr-4">{w.date.toISOString().slice(0, 10)}</td>
                   <td className="py-2 pr-4">{w.type}</td>
                   <td className="py-2 pr-4">{w.durationMin} min</td>
                   <td className="py-2 pr-4">{w.caloriesBurned ?? "—"}</td>
                   <td className="py-2 pr-4">{w.distanceKm ?? "—"}</td>
                   <td className="py-2 pr-4">{w.trackedWith ?? "—"}</td>
-                  <td className="py-2 pr-4 text-zinc-500">{metricsSummary(w) ?? "—"}</td>
+                  <td className="py-2 pr-4 text-slate-500">{metricsSummary(w) ?? "—"}</td>
                 </tr>
               ))}
               {workouts.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="py-4 text-zinc-500">
+                  <td colSpan={7} className="py-4 text-slate-500">
                     No workouts yet.
                   </td>
                 </tr>

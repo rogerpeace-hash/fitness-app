@@ -71,7 +71,7 @@ export default function CoachChat({ initialMessages }: { initialMessages: Messag
               key={prompt}
               type="button"
               onClick={() => sendMessage(prompt)}
-              className="rounded-full border border-zinc-300 px-3 py-1.5 text-sm text-zinc-600 hover:border-black hover:text-black dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-white dark:hover:text-white"
+              className="rounded-full border border-slate-300 px-3 py-1.5 text-sm text-slate-600 hover:border-blue-600 hover:text-blue-600 dark:border-slate-700 dark:text-slate-400 dark:hover:border-blue-400 dark:hover:text-blue-400"
             >
               {prompt}
             </button>
@@ -79,9 +79,9 @@ export default function CoachChat({ initialMessages }: { initialMessages: Messag
         </div>
       )}
 
-      <div className="flex min-h-[300px] flex-col gap-4 rounded-md border border-zinc-200 p-4 dark:border-zinc-800">
+      <div className="flex min-h-[300px] flex-col gap-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         {messages.length === 0 && (
-          <p className="text-sm text-zinc-500">
+          <p className="text-sm text-slate-500">
             Ask about your trends — what to work on, how you're tracking toward goals, or
             nutrition ideas based on your logs.
           </p>
@@ -91,8 +91,8 @@ export default function CoachChat({ initialMessages }: { initialMessages: Messag
             <div
               className={`inline-block max-w-lg rounded-lg px-3 py-2 text-sm ${
                 m.role === "user"
-                  ? "bg-black text-white dark:bg-white dark:text-black"
-                  : "bg-zinc-100 text-zinc-800 dark:bg-zinc-800 dark:text-zinc-100"
+                  ? "bg-blue-600 text-white dark:bg-blue-500 dark:text-white"
+                  : "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-100"
               }`}
             >
               {m.role === "assistant" ? (
@@ -127,12 +127,12 @@ export default function CoachChat({ initialMessages }: { initialMessages: Messag
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask the coach..."
           disabled={isStreaming}
-          className="flex-1 rounded-md border border-zinc-300 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-900"
+          className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900"
         />
         <button
           type="submit"
           disabled={isStreaming || !input.trim()}
-          className="rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800 disabled:opacity-40 dark:bg-white dark:text-black"
+          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 disabled:opacity-40 dark:bg-blue-500 dark:text-white"
         >
           Send
         </button>
@@ -145,7 +145,7 @@ export default function CoachChat({ initialMessages }: { initialMessages: Messag
             await clearChat();
             setMessages([]);
           }}
-          className="w-fit text-xs text-zinc-500 underline hover:text-black dark:hover:text-white"
+          className="w-fit text-xs text-slate-500 underline hover:text-blue-600 dark:hover:text-blue-400"
         >
           Clear chat
         </button>

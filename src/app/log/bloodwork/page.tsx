@@ -35,17 +35,17 @@ export default async function BloodworkLogPage({
           {panels.map((panel) => (
             <div
               key={panel.id}
-              className="rounded-md border border-zinc-200 p-4 dark:border-zinc-800"
+              className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900"
             >
               <div className="mb-2 flex items-baseline gap-3">
                 <span className="font-medium">{panel.date.toISOString().slice(0, 10)}</span>
                 {panel.labName && (
-                  <span className="text-sm text-zinc-500">{panel.labName}</span>
+                  <span className="text-sm text-slate-500">{panel.labName}</span>
                 )}
               </div>
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-zinc-200 text-left dark:border-zinc-800">
+                  <tr className="border-b border-slate-200 text-left dark:border-slate-800">
                     <th className="py-1 pr-4">Marker</th>
                     <th className="py-1 pr-4">Value</th>
                     <th className="py-1 pr-4">Unit</th>
@@ -58,7 +58,7 @@ export default async function BloodworkLogPage({
                       (marker.refLow !== null && marker.value < marker.refLow) ||
                       (marker.refHigh !== null && marker.value > marker.refHigh);
                     return (
-                      <tr key={marker.id} className="border-b border-zinc-100 dark:border-zinc-900">
+                      <tr key={marker.id} className="border-b border-slate-100 dark:border-slate-900">
                         <td className="py-1 pr-4">{marker.name}</td>
                         <td className={`py-1 pr-4 ${outOfRange ? "font-semibold text-red-600 dark:text-red-400" : ""}`}>
                           {marker.value}
@@ -74,7 +74,7 @@ export default async function BloodworkLogPage({
               </table>
             </div>
           ))}
-          {panels.length === 0 && <p className="text-zinc-500">No panels yet.</p>}
+          {panels.length === 0 && <p className="text-slate-500">No panels yet.</p>}
         </div>
       </div>
     </div>

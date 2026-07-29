@@ -14,12 +14,12 @@ export type SegmentalPoint = { segment: string; pct: number };
 
 export default function SegmentalRadarChart({ data }: { data: SegmentalPoint[] }) {
   if (data.length === 0) {
-    return <p className="text-sm text-zinc-500">Not enough InBody scans yet for a segmental comparison.</p>;
+    return <p className="text-sm text-slate-500">Not enough InBody scans yet for a segmental comparison.</p>;
   }
   return (
     <ResponsiveContainer width="100%" height={280}>
       <RadarChart data={data} outerRadius="75%">
-        <PolarGrid className="stroke-zinc-200 dark:stroke-zinc-800" />
+        <PolarGrid className="stroke-slate-200 dark:stroke-slate-800" />
         <PolarAngleAxis dataKey="segment" tick={{ fontSize: 12 }} />
         <PolarRadiusAxis angle={90} domain={[60, 140]} tick={{ fontSize: 10 }} tickCount={5} />
         <Tooltip

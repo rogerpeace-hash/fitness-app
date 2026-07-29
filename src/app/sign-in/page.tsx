@@ -13,7 +13,7 @@ export default function SignInPage() {
       >
         <button
           type="submit"
-          className="rounded-md bg-black px-4 py-2 text-white hover:bg-gray-800"
+          className="rounded-md bg-blue-600 px-4 py-2 text-white font-medium shadow-sm hover:bg-blue-700"
         >
           Sign in with Google
         </button>

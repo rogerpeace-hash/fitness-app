@@ -1,8 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
-import Link from "next/link";
+import Image from "next/image";
 import { auth, signOut } from "@/auth";
 import DailyVerseModal from "./DailyVerseModal";
+import NavLinks from "./NavLinks";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -31,22 +32,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#111827",
+  themeColor: "#0f172a",
 };
-
-const navLinks = [
-  { href: "/", label: "Dashboard" },
-  { href: "/coach", label: "Coach" },
-  { href: "/log/weight", label: "Weight" },
-  { href: "/log/nutrition", label: "Nutrition" },
-  { href: "/log/workout", label: "Workout" },
-  { href: "/log/journal", label: "Journal" },
-  { href: "/log/inbody", label: "InBody" },
-  { href: "/log/renpho", label: "Renpho" },
-  { href: "/log/bloodwork", label: "Bloodwork" },
-  { href: "/goals", label: "Goals" },
-  { href: "/import", label: "Import" },
-];
 
 export default async function RootLayout({
   children,
@@ -60,32 +47,25 @@ export default async function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-zinc-50 dark:bg-black">
+      <body className="min-h-full flex flex-col bg-slate-50 dark:bg-slate-950">
         {session?.user && <DailyVerseModal />}
         {session?.user && (
-          <header className="border-b border-zinc-200 bg-white dark:border-zinc-800 dark:bg-black">
-            <div className="mx-auto flex max-w-5xl items-center justify-between gap-4 px-6 py-4">
-              <nav className="flex flex-wrap items-center gap-4 text-sm font-medium">
-                {navLinks.map((link) => (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    className="text-zinc-700 hover:text-black dark:text-zinc-300 dark:hover:text-white"
-                  >
-                    {link.label}
-                  </Link>
-                ))}
-              </nav>
+          <header className="border-b border-blue-950/40 bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950 shadow-md">
+            <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-6 py-3">
+              <div className="flex flex-wrap items-center gap-4">
+                <div className="flex items-center gap-2">
+                  <Image src="/icon-192.png" alt="" width={28} height={28} className="rounded-md" />
+                  <span className="font-semibold tracking-tight text-white">Health Tracker</span>
+                </div>
+                <NavLinks />
+              </div>
               <form
                 action={async () => {
                   "use server";
                   await signOut({ redirectTo: "/sign-in" });
                 }}
               >
-                <button
-                  type="submit"
-                  className="text-sm text-zinc-500 hover:text-black dark:hover:text-white"
-                >
+                <button type="submit" className="text-sm text-slate-400 hover:text-blue-300">
                   Sign out
                 </button>
               </form>

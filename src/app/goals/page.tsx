@@ -4,7 +4,7 @@ import { updateGoalStatus } from "@/lib/actions/goals";
 import GoalForm from "./GoalForm";
 
 const typeLabels: Record<string, string> = {
-  WEIGHT: "Weight (kg)",
+  WEIGHT: "Weight (lb)",
   BODY_FAT: "Body fat %",
   EXERCISE: "Exercise",
 };
@@ -59,28 +59,28 @@ export default async function GoalsPage({
           return (
             <div
               key={goal.id}
-              className="rounded-md border border-zinc-200 p-4 dark:border-zinc-800"
+              className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900"
             >
               <div className="mb-2 flex items-center justify-between">
                 <span className="font-medium">{typeLabels[goal.type]}</span>
-                <span className="text-xs uppercase text-zinc-500">{goal.status}</span>
+                <span className="text-xs uppercase text-slate-500">{goal.status}</span>
               </div>
-              <p className="text-sm text-zinc-600 dark:text-zinc-400">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
                 {goal.type === "EXERCISE"
                   ? `${goal.targetValue} workouts / week`
                   : `${goal.startValue} → ${goal.targetValue}`}
                 {goal.targetDate && ` by ${goal.targetDate.toISOString().slice(0, 10)}`}
               </p>
               {pct !== null && (
-                <div className="mt-2 h-2 w-full rounded-full bg-zinc-100 dark:bg-zinc-800">
+                <div className="mt-2 h-2 w-full rounded-full bg-slate-100 dark:bg-slate-800">
                   <div
-                    className="h-2 rounded-full bg-black dark:bg-white"
+                    className="h-2 rounded-full bg-blue-600 dark:bg-blue-500"
                     style={{ width: `${pct}%` }}
                   />
                 </div>
               )}
               {goal.notes && (
-                <p className="mt-2 text-sm text-zinc-500">{goal.notes}</p>
+                <p className="mt-2 text-sm text-slate-500">{goal.notes}</p>
               )}
               {goal.status === "ACTIVE" && (
                 <div className="mt-3 flex gap-3 text-sm">
@@ -90,7 +90,7 @@ export default async function GoalsPage({
                     </button>
                   </form>
                   <form action={updateGoalStatus.bind(null, goal.id, "ABANDONED")}>
-                    <button type="submit" className="text-zinc-500 underline">
+                    <button type="submit" className="text-slate-500 underline">
                       Abandon
                     </button>
                   </form>
@@ -99,7 +99,7 @@ export default async function GoalsPage({
             </div>
           );
         })}
-        {goals.length === 0 && <p className="text-zinc-500">No goals yet.</p>}
+        {goals.length === 0 && <p className="text-slate-500">No goals yet.</p>}
       </div>
     </div>
   );

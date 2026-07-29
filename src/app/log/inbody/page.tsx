@@ -14,7 +14,7 @@ const numberField = (
       step={step}
       name={name}
       required={required}
-      className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+      className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
     />
   </label>
 );
@@ -50,9 +50,9 @@ export default async function InBodyLogPage({
         </p>
       )}
 
-      <div className="rounded-md border border-zinc-200 p-4 dark:border-zinc-800">
+      <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <h2 className="mb-2 text-sm font-medium">Import from InBody app export (CSV)</h2>
-        <p className="mb-3 text-sm text-zinc-500">
+        <p className="mb-3 text-sm text-slate-500">
           In the InBody app, export your history as CSV and upload it here — this captures
           the full segmental lean/fat breakdown automatically, no manual typing needed.
         </p>
@@ -66,14 +66,14 @@ export default async function InBodyLogPage({
           />
           <button
             type="submit"
-            className="rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
+            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
           >
             Import
           </button>
         </form>
       </div>
 
-      <details className="rounded-md border border-zinc-200 p-4 dark:border-zinc-800">
+      <details className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
         <summary className="cursor-pointer text-sm font-medium">Or enter a scan manually</summary>
         <form action={createInBodyScan} className="mt-4 grid grid-cols-2 gap-4">
           <label className="col-span-2 flex flex-col gap-1 text-sm">
@@ -83,7 +83,7 @@ export default async function InBodyLogPage({
               name="date"
               required
               defaultValue={new Date().toISOString().slice(0, 10)}
-              className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+              className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
             />
           </label>
           {numberField("Weight (lb)", "weightLb", { required: true })}
@@ -97,12 +97,12 @@ export default async function InBodyLogPage({
             <textarea
               name="notes"
               rows={2}
-              className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+              className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
             />
           </label>
           <button
             type="submit"
-            className="col-span-2 w-fit rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
+            className="col-span-2 w-fit rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
           >
             Save scan
           </button>
@@ -114,7 +114,7 @@ export default async function InBodyLogPage({
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-200 text-left dark:border-zinc-800">
+              <tr className="border-b border-slate-200 text-left dark:border-slate-800">
                 <th className="py-2 pr-4">Date</th>
                 <th className="py-2 pr-4">Weight</th>
                 <th className="py-2 pr-4">SMM</th>
@@ -128,7 +128,7 @@ export default async function InBodyLogPage({
             </thead>
             <tbody>
               {scans.map((scan) => (
-                <tr key={scan.id} className="border-b border-zinc-100 dark:border-zinc-900">
+                <tr key={scan.id} className="border-b border-slate-100 dark:border-slate-900">
                   <td className="py-2 pr-4">{scan.date.toISOString().slice(0, 10)}</td>
                   <td className="py-2 pr-4">{scan.weightLb.toFixed(1)}</td>
                   <td className="py-2 pr-4">{scan.skeletalMuscleMassLb ?? "—"}</td>
@@ -137,7 +137,7 @@ export default async function InBodyLogPage({
                   <td className="py-2 pr-4">{scan.visceralFatLevel ?? "—"}</td>
                   <td className="py-2 pr-4">{scan.inBodyScore ?? "—"}</td>
                   {hasSegmentalData && (
-                    <td className="py-2 pr-4 text-zinc-500">
+                    <td className="py-2 pr-4 text-slate-500">
                       {scan.rightArmLeanLb !== null
                         ? `RA ${scan.rightArmLeanLb} · LA ${scan.leftArmLeanLb} · Tr ${scan.trunkLeanLb} · RL ${scan.rightLegLeanLb} · LL ${scan.leftLegLeanLb}`
                         : "—"}
@@ -154,7 +154,7 @@ export default async function InBodyLogPage({
               ))}
               {scans.length === 0 && (
                 <tr>
-                  <td colSpan={hasSegmentalData ? 9 : 8} className="py-4 text-zinc-500">
+                  <td colSpan={hasSegmentalData ? 9 : 8} className="py-4 text-slate-500">
                     No scans yet.
                   </td>
                 </tr>

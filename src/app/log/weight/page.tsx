@@ -34,7 +34,7 @@ export default async function WeightLogPage({
             name="date"
             required
             defaultValue={new Date().toISOString().slice(0, 10)}
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+            className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
@@ -44,7 +44,7 @@ export default async function WeightLogPage({
             step="0.1"
             name="weightLb"
             required
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+            className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
@@ -53,7 +53,7 @@ export default async function WeightLogPage({
             type="number"
             step="0.1"
             name="bodyFatPct"
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+            className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
@@ -62,7 +62,7 @@ export default async function WeightLogPage({
             type="number"
             step="0.1"
             name="neckIn"
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+            className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
@@ -71,7 +71,7 @@ export default async function WeightLogPage({
             type="number"
             step="0.1"
             name="waistIn"
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+            className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
           />
         </label>
         <label className="flex flex-col gap-1 text-sm">
@@ -80,7 +80,7 @@ export default async function WeightLogPage({
             type="number"
             step="0.1"
             name="hipIn"
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+            className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
           />
         </label>
         <label className="col-span-2 flex flex-col gap-1 text-sm">
@@ -88,12 +88,12 @@ export default async function WeightLogPage({
           <textarea
             name="notes"
             rows={2}
-            className="rounded-md border border-zinc-300 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-900"
+            className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
           />
         </label>
         <button
           type="submit"
-          className="col-span-2 w-fit rounded-md bg-black px-4 py-2 text-sm text-white hover:bg-gray-800"
+          className="col-span-2 w-fit rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
         >
           Save entry
         </button>
@@ -104,7 +104,7 @@ export default async function WeightLogPage({
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-zinc-200 text-left dark:border-zinc-800">
+              <tr className="border-b border-slate-200 text-left dark:border-slate-800">
                 <th className="py-2 pr-4">Date</th>
                 <th className="py-2 pr-4">Weight (lb)</th>
                 <th className="py-2 pr-4">Body fat %</th>
@@ -115,12 +115,12 @@ export default async function WeightLogPage({
             </thead>
             <tbody>
               {entries.map((entry) => (
-                <tr key={entry.id} className="border-b border-zinc-100 dark:border-zinc-900">
+                <tr key={entry.id} className="border-b border-slate-100 dark:border-slate-900">
                   <td className="py-2 pr-4">{entry.date.toISOString().slice(0, 10)}</td>
                   <td className="py-2 pr-4">{entry.weightLb.toFixed(1)}</td>
                   <td className="py-2 pr-4">{entry.bodyFatPct ?? "—"}</td>
                   <td className="py-2 pr-4">{entry.waistIn ?? "—"}</td>
-                  <td className="py-2 pr-4 text-zinc-500">{entry.device ?? "Manual"}</td>
+                  <td className="py-2 pr-4 text-slate-500">{entry.device ?? "Manual"}</td>
                   <td className="py-2 pr-4">
                     <form action={deleteBodyMetric.bind(null, entry.id)}>
                       <button type="submit" className="text-xs text-red-600 underline dark:text-red-400">
@@ -132,7 +132,7 @@ export default async function WeightLogPage({
               ))}
               {entries.length === 0 && (
                 <tr>
-                  <td colSpan={6} className="py-4 text-zinc-500">
+                  <td colSpan={6} className="py-4 text-slate-500">
                     No entries yet.
                   </td>
                 </tr>
