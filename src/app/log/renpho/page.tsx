@@ -55,7 +55,7 @@ export default async function RenphoLogPage({
           In the Renpho app, export your history as CSV and upload it here.
         </p>
         <form action={importRenphoCsv} className="flex flex-wrap items-center gap-3">
-          <input type="file" name="file" accept=".csv,text/csv" required className="text-sm" />
+          <input type="file" name="file" accept=".csv,text/csv,text/comma-separated-values,application/vnd.ms-excel,application/csv,text/plain" required className="text-sm" />
           <button
             type="submit"
             className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"

@@ -70,7 +70,7 @@ export default function ImportForm({ presets }: { presets: Preset[] }) {
         <input
           type="file"
           name="file"
-          accept=".csv,text/csv"
+          accept=".csv,text/csv,text/comma-separated-values,application/vnd.ms-excel,application/csv,text/plain"
           required
           onChange={(e) => handleFile(e.target.files?.[0])}
           className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"

@@ -60,7 +60,7 @@ export default async function InBodyLogPage({
           <input
             type="file"
             name="file"
-            accept=".csv,text/csv"
+            accept=".csv,text/csv,text/comma-separated-values,application/vnd.ms-excel,application/csv,text/plain"
             required
             className="text-sm"
           />
