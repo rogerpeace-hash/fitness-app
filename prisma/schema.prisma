@@ -77,8 +77,25 @@ model BodyMetric {
   id          String     @id @default(cuid())
   userId      String
   date        DateTime
-  weightKg    Float
+  weightLb    Float
   bodyFatPct  Float?
+  device      String? // e.g. "Renpho", for smart-scale readings
+  // Optional smart-scale extras (e.g. from a Renpho export)
+  bmi                Float?
+  skeletalMusclePct  Float?
+  fatFreeMassLb      Float?
+  subcutaneousFatPct Float?
+  visceralFatLevel   Float?
+  bodyWaterPct       Float?
+  muscleMassLb       Float?
+  boneMassLb         Float?
+  proteinPct         Float?
+  bmr                Int?
+  metabolicAge       Int?
+  // Tape-measure body measurements (inches)
+  neckIn Float?
+  waistIn Float?
+  hipIn   Float?
   source      DataSource @default(MANUAL)
   sourceLabel String?
   notes       String?
@@ -93,12 +110,39 @@ model InBodyScan {
   id                   String   @id @default(cuid())
   userId               String
   date                 DateTime
-  weightKg             Float
-  skeletalMuscleMassKg Float?
-  bodyFatMassKg        Float?
+  weightLb             Float
+  skeletalMuscleMassLb Float?
+  bodyFatMassLb        Float?
   bodyFatPct           Float?
   visceralFatLevel     Float?
   bmr                  Int?
+  inBodyScore          Int?
+  // Segmental Lean Analysis (lb)
+  rightArmLeanLb Float?
+  leftArmLeanLb  Float?
+  trunkLeanLb    Float?
+  rightLegLeanLb Float?
+  leftLegLeanLb  Float?
+  // Segmental Lean Analysis (% of ideal per segment)
+  rightArmLeanPct Float?
+  leftArmLeanPct  Float?
+  trunkLeanPct    Float?
+  rightLegLeanPct Float?
+  leftLegLeanPct  Float?
+  // Segmental Fat Analysis (lb)
+  rightArmFatLb Float?
+  leftArmFatLb  Float?
+  trunkFatLb    Float?
+  rightLegFatLb Float?
+  leftLegFatLb  Float?
+  // Water / cell composition
+  totalBodyWaterL       Float?
+  intracellularWaterL   Float?
+  extracellularWaterL   Float?
+  ecwRatio              Float?
+  bodyCellMassLb        Float?
+  smi                   Float?
+  phaseAngle            Float?
   notes                String?
   createdAt            DateTime @default(now())
 

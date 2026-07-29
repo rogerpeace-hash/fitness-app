@@ -15,7 +15,7 @@ import {
   Legend,
 } from "recharts";
 
-type WeightPoint = { date: string; weightKg: number; bodyFatPct?: number | null };
+type WeightPoint = { date: string; weightLb: number; bodyFatPct?: number | null };
 type NutritionPoint = { date: string; calories: number };
 type WeeklyWorkoutPoint = { weekLabel: string; count: number; met: boolean };
 
@@ -31,7 +31,7 @@ export function WeightChart({ data }: { data: WeightPoint[] }) {
         <YAxis tick={{ fontSize: 12 }} domain={["auto", "auto"]} />
         <Tooltip />
         <Legend />
-        <Line type="monotone" dataKey="weightKg" name="Weight (kg)" stroke="#2563eb" dot={false} strokeWidth={2} />
+        <Line type="monotone" dataKey="weightLb" name="Weight (lb)" stroke="#2563eb" dot={false} strokeWidth={2} />
       </LineChart>
     </ResponsiveContainer>
   );

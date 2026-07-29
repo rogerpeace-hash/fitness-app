@@ -9,7 +9,7 @@ export type ImportFieldDef = {
 export const IMPORT_FIELD_DEFS: Record<ImportDataType, ImportFieldDef[]> = {
   BODY_METRIC: [
     { key: "date", label: "Date", required: true },
-    { key: "weightKg", label: "Weight (kg)", required: true },
+    { key: "weightLb", label: "Weight (lb)", required: true },
     { key: "bodyFatPct", label: "Body fat %", required: false },
   ],
   NUTRITION_LOG: [

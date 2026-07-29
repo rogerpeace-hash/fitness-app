@@ -3,13 +3,22 @@ import { prisma } from "@/lib/prisma";
 import { requireUserId } from "@/lib/auth-helpers";
 import { WeightChart, NutritionChart, WorkoutWeeklyChart } from "./DashboardCharts";
 import WorkoutHeatmap from "./WorkoutHeatmap";
+import SegmentalRadarChart, { type SegmentalPoint } from "./SegmentalRadarChart";
 import { computeWorkoutStatus, buildHeatmapDays, buildWeeklyBuckets } from "@/lib/workout-status";
 
 const typeLabels: Record<string, string> = {
-  WEIGHT: "Weight (kg)",
+  WEIGHT: "Weight (lb)",
   BODY_FAT: "Body fat %",
   EXERCISE: "Exercise",
 };
+
+const SEGMENTS = [
+  { key: "rightArmLeanLb", label: "Right Arm" },
+  { key: "leftArmLeanLb", label: "Left Arm" },
+  { key: "trunkLeanLb", label: "Trunk" },
+  { key: "rightLegLeanLb", label: "Right Leg" },
+  { key: "leftLegLeanLb", label: "Left Leg" },
+] as const;
 
 export default async function DashboardPage() {
   const userId = await requireUserId();
@@ -22,7 +31,7 @@ export default async function DashboardPage() {
   const since84d = new Date();
   since84d.setDate(since84d.getDate() - 84);
 
-  const [weightEntries, nutritionByDay, activeGoals, latestScan, recentWorkouts] = await Promise.all([
+  const [weightEntries, nutritionByDay, activeGoals, latestScan, recentWorkouts, inBodyScans] = await Promise.all([
     prisma.bodyMetric.findMany({
       where: { userId, date: { gte: since90d } },
       orderBy: { date: "asc" },
@@ -47,6 +56,11 @@ export default async function DashboardPage() {
       orderBy: { date: "asc" },
       select: { date: true },
     }),
+    prisma.inBodyScan.findMany({
+      where: { userId },
+      orderBy: { date: "desc" },
+      take: 10,
+    }),
   ]);
 
   const exerciseGoal = activeGoals.find((g) => g.type === "EXERCISE") ?? null;
@@ -68,7 +82,7 @@ export default async function DashboardPage() {
 
   const weightChartData = weightEntries.map((e) => ({
     date: e.date.toISOString().slice(5, 10),
-    weightKg: e.weightKg,
+    weightLb: e.weightLb,
     bodyFatPct: e.bodyFatPct,
   }));
 
@@ -76,6 +90,19 @@ export default async function DashboardPage() {
     date: d.date.toISOString().slice(5, 10),
     calories: Math.round(d._sum.calories ?? 0),
   }));
+
+  const latestInBodyScan = inBodyScans[0];
+  const segmentalRadarData: SegmentalPoint[] = latestInBodyScan
+    ? SEGMENTS.map(({ key, label }) => {
+        const latestValue = latestInBodyScan[key];
+        const values = inBodyScans
+          .map((s) => s[key])
+          .filter((v): v is number => v !== null && v !== undefined);
+        if (latestValue === null || latestValue === undefined || values.length === 0) return null;
+        const avg = values.reduce((a, b) => a + b, 0) / values.length;
+        return { segment: label as string, pct: avg > 0 ? (latestValue / avg) * 100 : 100 };
+      }).filter((p): p is SegmentalPoint => p !== null)
+    : [];
 
   return (
     <div className="flex flex-col gap-10">
@@ -85,7 +112,7 @@ export default async function DashboardPage() {
         <div className="rounded-md border border-zinc-200 p-4 dark:border-zinc-800">
           <p className="text-xs uppercase text-zinc-500">Latest weight</p>
           <p className="text-2xl font-semibold">
-            {latestMetric ? `${latestMetric.weightKg} kg` : "—"}
+            {latestMetric ? `${latestMetric.weightLb.toFixed(1)} lb` : "—"}
           </p>
         </div>
         <div className="rounded-md border border-zinc-200 p-4 dark:border-zinc-800">
@@ -141,6 +168,48 @@ export default async function DashboardPage() {
         </div>
       </section>
 
+      {latestInBodyScan && (
+        <section>
+          <div className="mb-3 flex items-center justify-between">
+            <h2 className="text-lg font-medium">Body Composition (InBody)</h2>
+            <Link href="/log/inbody" className="text-sm text-zinc-500 underline hover:text-black dark:hover:text-white">
+              Log a scan
+            </Link>
+          </div>
+          <div className="rounded-md border border-zinc-200 p-4 dark:border-zinc-800">
+            <div className="mb-4 flex flex-wrap gap-6 text-sm">
+              {latestInBodyScan.inBodyScore !== null && (
+                <div>
+                  <span className="text-zinc-500">InBody Score </span>
+                  <span className="font-semibold">{latestInBodyScan.inBodyScore}</span>
+                </div>
+              )}
+              {latestInBodyScan.visceralFatLevel !== null && (
+                <div>
+                  <span className="text-zinc-500">Visceral Fat Level </span>
+                  <span
+                    className={`font-semibold ${
+                      latestInBodyScan.visceralFatLevel >= 10
+                        ? "text-red-600 dark:text-red-400"
+                        : ""
+                    }`}
+                  >
+                    {latestInBodyScan.visceralFatLevel}
+                  </span>
+                </div>
+              )}
+            </div>
+            <SegmentalRadarChart data={segmentalRadarData} />
+            {segmentalRadarData.length > 0 && (
+              <p className="mt-2 text-xs text-zinc-500">
+                Each segment shown as % of your own historical average — 100% is your norm,
+                not a clinical ideal.
+              </p>
+            )}
+          </div>
+        </section>
+      )}
+
       <section>
         <h2 className="mb-3 text-lg font-medium">Weight trend (90 days)</h2>
         <WeightChart data={weightChartData} />
@@ -162,7 +231,7 @@ export default async function DashboardPage() {
           {activeGoals.map((goal) => {
             const current =
               goal.type === "WEIGHT"
-                ? latestMetric?.weightKg
+                ? latestMetric?.weightLb
                 : goal.type === "BODY_FAT"
                   ? latestScan?.bodyFatPct ?? latestMetric?.bodyFatPct
                   : null;

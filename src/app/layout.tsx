@@ -40,6 +40,7 @@ const navLinks = [
   { href: "/log/workout", label: "Workout" },
   { href: "/log/journal", label: "Journal" },
   { href: "/log/inbody", label: "InBody" },
+  { href: "/log/renpho", label: "Renpho" },
   { href: "/log/bloodwork", label: "Bloodwork" },
   { href: "/goals", label: "Goals" },
   { href: "/import", label: "Import" },

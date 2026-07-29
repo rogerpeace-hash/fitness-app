@@ -29,7 +29,7 @@ export default async function GoalsPage({
   ]);
 
   const currentValueFor = (type: string) => {
-    if (type === "WEIGHT") return latestMetric?.weightKg ?? null;
+    if (type === "WEIGHT") return latestMetric?.weightLb ?? null;
     if (type === "BODY_FAT") return latestMetric?.bodyFatPct ?? null;
     return null;
   };

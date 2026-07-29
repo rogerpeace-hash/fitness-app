@@ -61,15 +61,15 @@ export async function commitImport(formData: FormData) {
     const records = [];
     for (const row of rows) {
       const date = toDate(row[mapping.date]);
-      const weightKg = toNumber(row[mapping.weightKg]);
-      if (!date || weightKg === undefined) {
+      const weightLb = toNumber(row[mapping.weightLb]);
+      if (!date || weightLb === undefined) {
         skipped++;
         continue;
       }
       records.push({
         userId,
         date,
-        weightKg,
+        weightLb,
         bodyFatPct: mapping.bodyFatPct ? toNumber(row[mapping.bodyFatPct]) : undefined,
         source: "IMPORT" as const,
         sourceLabel: file.name,

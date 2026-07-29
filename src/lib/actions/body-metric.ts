@@ -6,10 +6,18 @@ import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireUserId } from "@/lib/auth-helpers";
 
+const optionalNumber = z
+  .union([z.coerce.number(), z.literal("")])
+  .optional()
+  .transform((v) => (v === "" || v === undefined ? undefined : v));
+
 const schema = z.object({
   date: z.coerce.date(),
-  weightKg: z.coerce.number().positive(),
-  bodyFatPct: z.coerce.number().min(0).max(100).optional().or(z.literal("").transform(() => undefined)),
+  weightLb: z.coerce.number().positive(),
+  bodyFatPct: optionalNumber,
+  neckIn: optionalNumber,
+  waistIn: optionalNumber,
+  hipIn: optionalNumber,
   notes: z.string().optional(),
 });
 
@@ -17,8 +25,11 @@ export async function createBodyMetric(formData: FormData) {
   const userId = await requireUserId();
   const parsed = schema.parse({
     date: formData.get("date"),
-    weightKg: formData.get("weightKg"),
+    weightLb: formData.get("weightLb"),
     bodyFatPct: formData.get("bodyFatPct") ?? "",
+    neckIn: formData.get("neckIn") ?? "",
+    waistIn: formData.get("waistIn") ?? "",
+    hipIn: formData.get("hipIn") ?? "",
     notes: formData.get("notes") ?? undefined,
   });
 
@@ -26,8 +37,11 @@ export async function createBodyMetric(formData: FormData) {
     data: {
       userId,
       date: parsed.date,
-      weightKg: parsed.weightKg,
+      weightLb: parsed.weightLb,
       bodyFatPct: parsed.bodyFatPct,
+      neckIn: parsed.neckIn,
+      waistIn: parsed.waistIn,
+      hipIn: parsed.hipIn,
       notes: parsed.notes || undefined,
     },
   });
