@@ -9,6 +9,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [Google],
   session: { strategy: "database" },
+  // Deployed behind Fly's proxy, so Auth.js must be told to trust the
+  // forwarded host header rather than depending on AUTH_TRUST_HOST being set.
+  trustHost: true,
   pages: {
     signIn: "/sign-in",
   },
