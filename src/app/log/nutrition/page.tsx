@@ -2,6 +2,7 @@ import { prisma } from "@/lib/prisma";
 import { requireUserId } from "@/lib/auth-helpers";
 import { deleteNutritionLog } from "@/lib/actions/nutrition";
 import NutritionForm from "./NutritionForm";
+import FluidSection from "./FluidSection";
 
 export default async function NutritionLogPage({
   searchParams,
@@ -11,11 +12,26 @@ export default async function NutritionLogPage({
   const userId = await requireUserId();
   const { saved } = await searchParams;
 
-  const entries = await prisma.nutritionLog.findMany({
-    where: { userId },
-    orderBy: { date: "desc" },
-    take: 20,
-  });
+  const startOfToday = new Date();
+  startOfToday.setHours(0, 0, 0, 0);
+  const endOfToday = new Date(startOfToday);
+  endOfToday.setDate(endOfToday.getDate() + 1);
+
+  const [entries, todaysFluids, recentFluids] = await Promise.all([
+    prisma.nutritionLog.findMany({
+      where: { userId },
+      orderBy: { date: "desc" },
+      take: 20,
+    }),
+    prisma.fluidLog.findMany({
+      where: { userId, date: { gte: startOfToday, lt: endOfToday } },
+    }),
+    prisma.fluidLog.findMany({
+      where: { userId },
+      orderBy: { date: "desc" },
+      take: 15,
+    }),
+  ]);
 
   return (
     <div className="flex flex-col gap-8">
@@ -27,10 +43,16 @@ export default async function NutritionLogPage({
         </p>
       )}
 
-      <NutritionForm />
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <div className="flex flex-col gap-4">
+          <h2 className="text-lg font-medium">Food</h2>
+          <NutritionForm />
+        </div>
+        <FluidSection todaysFluids={todaysFluids} recentFluids={recentFluids} />
+      </div>
 
       <div>
-        <h2 className="mb-3 text-lg font-medium">Recent entries</h2>
+        <h2 className="mb-3 text-lg font-medium">Recent food entries</h2>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>

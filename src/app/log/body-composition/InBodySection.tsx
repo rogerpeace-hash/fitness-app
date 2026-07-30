@@ -1,6 +1,5 @@
-import { prisma } from "@/lib/prisma";
-import { requireUserId } from "@/lib/auth-helpers";
 import { createInBodyScan, importInBodyCsv, deleteInBodyScan } from "@/lib/actions/inbody";
+import type { InBodyScan } from "@/generated/prisma/client";
 
 const numberField = (
   label: string,
@@ -19,31 +18,17 @@ const numberField = (
   </label>
 );
 
-export default async function InBodyLogPage({
-  searchParams,
+export default function InBodySection({
+  scans,
+  imported,
 }: {
-  searchParams: Promise<{ saved?: string; imported?: string }>;
+  scans: InBodyScan[];
+  imported?: string;
 }) {
-  const userId = await requireUserId();
-  const { saved, imported } = await searchParams;
-
-  const scans = await prisma.inBodyScan.findMany({
-    where: { userId },
-    orderBy: { date: "desc" },
-    take: 20,
-  });
-
   const hasSegmentalData = scans.some((s) => s.rightArmLeanLb !== null);
 
   return (
     <div className="flex flex-col gap-8">
-      <h1 className="text-2xl font-semibold">InBody Scan</h1>
-
-      {saved && (
-        <p className="rounded-md bg-green-50 px-4 py-2 text-sm text-green-800 dark:bg-green-950 dark:text-green-300">
-          Saved.
-        </p>
-      )}
       {imported && (
         <p className="rounded-md bg-green-50 px-4 py-2 text-sm text-green-800 dark:bg-green-950 dark:text-green-300">
           Imported {imported} scan{imported === "1" ? "" : "s"} from your InBody export.

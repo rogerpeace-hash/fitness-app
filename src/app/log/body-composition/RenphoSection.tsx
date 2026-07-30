@@ -1,7 +1,6 @@
-import { prisma } from "@/lib/prisma";
-import { requireUserId } from "@/lib/auth-helpers";
 import { createRenphoReading, importRenphoCsv } from "@/lib/actions/renpho";
 import { deleteBodyMetric } from "@/lib/actions/body-metric";
+import type { BodyMetric } from "@/generated/prisma/client";
 
 const numberField = (
   label: string,
@@ -20,29 +19,15 @@ const numberField = (
   </label>
 );
 
-export default async function RenphoLogPage({
-  searchParams,
+export default function RenphoSection({
+  readings,
+  imported,
 }: {
-  searchParams: Promise<{ saved?: string; imported?: string }>;
+  readings: BodyMetric[];
+  imported?: string;
 }) {
-  const userId = await requireUserId();
-  const { saved, imported } = await searchParams;
-
-  const readings = await prisma.bodyMetric.findMany({
-    where: { userId, device: "Renpho" },
-    orderBy: { date: "desc" },
-    take: 20,
-  });
-
   return (
     <div className="flex flex-col gap-8">
-      <h1 className="text-2xl font-semibold">Renpho Scale</h1>
-
-      {saved && (
-        <p className="rounded-md bg-green-50 px-4 py-2 text-sm text-green-800 dark:bg-green-950 dark:text-green-300">
-          Saved.
-        </p>
-      )}
       {imported && (
         <p className="rounded-md bg-green-50 px-4 py-2 text-sm text-green-800 dark:bg-green-950 dark:text-green-300">
           Imported {imported} reading{imported === "1" ? "" : "s"} from your Renpho export.

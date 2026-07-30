@@ -30,6 +30,7 @@ model User {
   importPresets  ImportPreset[]
   journalEntries JournalEntry[]
   chatMessages   ChatMessage[]
+  fluidLogs      FluidLog[]
 
   createdAt DateTime @default(now())
 }
@@ -200,6 +201,20 @@ model NutritionLog {
   @@index([userId, date])
 }
 
+model FluidLog {
+  id        String   @id @default(cuid())
+  userId    String
+  date      DateTime
+  drinkType String // "Water" | "Coffee" | "Tea" | "Soda" | "Juice" | "Alcohol" | "Other"
+  amountOz  Float
+  notes     String?
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date])
+}
+
 model Workout {
   id              String     @id @default(cuid())
   userId          String
@@ -261,6 +276,7 @@ enum GoalType {
   WEIGHT
   BODY_FAT
   EXERCISE
+  EXERCISE_REPS
 }
 
 enum GoalStatus {
@@ -270,20 +286,35 @@ enum GoalStatus {
 }
 
 model Goal {
-  id          String     @id @default(cuid())
-  userId      String
-  type        GoalType
-  startValue  Float
-  startDate   DateTime
-  targetValue Float
-  targetDate  DateTime?
-  status      GoalStatus @default(ACTIVE)
-  notes       String?
-  createdAt   DateTime   @default(now())
+  id           String     @id @default(cuid())
+  userId       String
+  type         GoalType
+  exerciseName String? // only for EXERCISE_REPS, e.g. "Strict Pull-ups"
+  startValue   Float
+  startDate    DateTime
+  targetValue  Float
+  targetDate   DateTime?
+  status       GoalStatus @default(ACTIVE)
+  notes        String?
+  createdAt    DateTime   @default(now())
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user         User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  progressLogs GoalProgressLog[]
 
   @@index([userId, status])
+}
+
+model GoalProgressLog {
+  id        String   @id @default(cuid())
+  goalId    String
+  date      DateTime
+  value     Float
+  notes     String?
+  createdAt DateTime @default(now())
+
+  goal Goal @relation(fields: [goalId], references: [id], onDelete: Cascade)
+
+  @@index([goalId, date])
 }
 
 enum ImportDataType {

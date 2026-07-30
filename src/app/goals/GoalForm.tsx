@@ -3,11 +3,25 @@
 import { useState } from "react";
 import { createGoal } from "@/lib/actions/goals";
 
-type GoalType = "WEIGHT" | "BODY_FAT" | "EXERCISE";
+type GoalType = "WEIGHT" | "BODY_FAT" | "EXERCISE" | "EXERCISE_REPS";
+
+const EXERCISE_PRESETS = [
+  "Strict Pull-ups",
+  "Chin-ups",
+  "Push-ups",
+  "Sit-ups",
+  "Bodyweight Squats",
+  "Dips",
+  "Burpees",
+  "Lunges (per leg)",
+];
 
 export default function GoalForm() {
   const [type, setType] = useState<GoalType>("WEIGHT");
-  const isExercise = type === "EXERCISE";
+  const [exercise, setExercise] = useState(EXERCISE_PRESETS[0]);
+  const [customExercise, setCustomExercise] = useState("");
+  const isFrequencyGoal = type === "EXERCISE";
+  const isRepsGoal = type === "EXERCISE_REPS";
 
   return (
     <form action={createGoal} className="grid max-w-xl grid-cols-2 gap-4">
@@ -22,18 +36,54 @@ export default function GoalForm() {
         >
           <option value="WEIGHT">Weight</option>
           <option value="BODY_FAT">Body fat %</option>
-          <option value="EXERCISE">Exercise (workouts/week)</option>
+          <option value="EXERCISE">Exercise frequency (workouts/week)</option>
+          <option value="EXERCISE_REPS">Exercise max reps (e.g. pull-ups)</option>
         </select>
       </label>
       <span />
 
-      {!isExercise && (
+      {isRepsGoal && (
         <>
           <label className="flex flex-col gap-1 text-sm">
-            Start value
+            Exercise
+            <select
+              value={exercise}
+              onChange={(e) => setExercise(e.target.value)}
+              className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+            >
+              {EXERCISE_PRESETS.map((ex) => (
+                <option key={ex} value={ex}>
+                  {ex}
+                </option>
+              ))}
+              <option value="Other">Other…</option>
+            </select>
+          </label>
+          {exercise === "Other" ? (
+            <label className="flex flex-col gap-1 text-sm">
+              Custom exercise name
+              <input
+                type="text"
+                value={customExercise}
+                onChange={(e) => setCustomExercise(e.target.value)}
+                placeholder="e.g. Muscle-ups"
+                className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+              />
+            </label>
+          ) : (
+            <span />
+          )}
+          <input type="hidden" name="exerciseName" value={exercise === "Other" ? customExercise : exercise} />
+        </>
+      )}
+
+      {!isFrequencyGoal && (
+        <>
+          <label className="flex flex-col gap-1 text-sm">
+            {isRepsGoal ? "Current max reps" : "Start value"}
             <input
               type="number"
-              step="0.1"
+              step={isRepsGoal ? "1" : "0.1"}
               name="startValue"
               required
               className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
@@ -53,22 +103,23 @@ export default function GoalForm() {
       )}
 
       <label className="flex flex-col gap-1 text-sm">
-        {isExercise ? "Workouts per week" : "Target value"}
+        {isFrequencyGoal ? "Workouts per week" : isRepsGoal ? "Target reps" : "Target value"}
         <input
           type="number"
-          step={isExercise ? "1" : "0.1"}
-          min={isExercise ? "1" : undefined}
+          step={isFrequencyGoal || isRepsGoal ? "1" : "0.1"}
+          min={isFrequencyGoal ? "1" : undefined}
           name="targetValue"
           required
           className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
         />
       </label>
-      {!isExercise && (
+      {!isFrequencyGoal && (
         <label className="flex flex-col gap-1 text-sm">
-          Target date (optional)
+          Target date {isRepsGoal ? "" : "(optional)"}
           <input
             type="date"
             name="targetDate"
+            required={isRepsGoal}
             className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
           />
         </label>

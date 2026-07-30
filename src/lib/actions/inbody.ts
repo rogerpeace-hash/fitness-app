@@ -51,14 +51,14 @@ export async function createInBodyScan(formData: FormData) {
   });
 
   revalidatePath("/");
-  redirect("/log/inbody?saved=1");
+  redirect("/log/body-composition?device=InBody&saved=1");
 }
 
 export async function deleteInBodyScan(id: string) {
   const userId = await requireUserId();
   await prisma.inBodyScan.deleteMany({ where: { id, userId } });
   revalidatePath("/");
-  revalidatePath("/log/inbody");
+  revalidatePath("/log/body-composition");
 }
 
 function normalizeKey(s: string): string {
@@ -153,5 +153,5 @@ export async function importInBodyCsv(formData: FormData) {
   await prisma.inBodyScan.createMany({ data: records });
 
   revalidatePath("/");
-  redirect(`/log/inbody?imported=${records.length}`);
+  redirect(`/log/body-composition?device=InBody&imported=${records.length}`);
 }

@@ -55,5 +55,5 @@ export async function deleteBodyMetric(id: string) {
   await prisma.bodyMetric.deleteMany({ where: { id, userId } });
   revalidatePath("/");
   revalidatePath("/log/weight");
-  revalidatePath("/log/renpho");
+  revalidatePath("/log/body-composition");
 }

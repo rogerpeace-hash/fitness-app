@@ -46,6 +46,7 @@ export default async function DashboardPage() {
       where: { userId, status: "ACTIVE" },
       orderBy: { createdAt: "desc" },
       take: 3,
+      include: { progressLogs: { orderBy: { date: "desc" }, take: 1 } },
     }),
     prisma.inBodyScan.findFirst({
       where: { userId },
@@ -172,7 +173,7 @@ export default async function DashboardPage() {
         <section>
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-lg font-medium">Body Composition (InBody)</h2>
-            <Link href="/log/inbody" className="text-sm text-slate-500 underline hover:text-blue-600 dark:hover:text-blue-400">
+            <Link href="/log/body-composition" className="text-sm text-slate-500 underline hover:text-blue-600 dark:hover:text-blue-400">
               Log a scan
             </Link>
           </div>
@@ -234,7 +235,9 @@ export default async function DashboardPage() {
                 ? latestMetric?.weightLb
                 : goal.type === "BODY_FAT"
                   ? latestScan?.bodyFatPct ?? latestMetric?.bodyFatPct
-                  : null;
+                  : goal.type === "EXERCISE_REPS"
+                    ? goal.progressLogs[0]?.value
+                    : null;
             const total = Math.abs(goal.targetValue - goal.startValue);
             const progressed = current != null ? Math.abs(current - goal.startValue) : null;
             const pct =
@@ -244,11 +247,15 @@ export default async function DashboardPage() {
             return (
               <div key={goal.id} className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
                 <div className="flex items-center justify-between text-sm">
-                  <span className="font-medium">{typeLabels[goal.type]}</span>
+                  <span className="font-medium">
+                    {goal.type === "EXERCISE_REPS" ? goal.exerciseName : typeLabels[goal.type]}
+                  </span>
                   <span className="text-slate-500">
                     {goal.type === "EXERCISE"
                       ? `${goal.targetValue} workouts / week`
-                      : `${goal.startValue} → ${goal.targetValue}`}
+                      : goal.type === "EXERCISE_REPS"
+                        ? `${current ?? goal.startValue} → ${goal.targetValue} reps`
+                        : `${goal.startValue} → ${goal.targetValue}`}
                   </span>
                 </div>
                 {pct !== null && (

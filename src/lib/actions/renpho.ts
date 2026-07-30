@@ -61,7 +61,7 @@ export async function createRenphoReading(formData: FormData) {
   });
 
   revalidatePath("/");
-  redirect("/log/renpho?saved=1");
+  redirect("/log/body-composition?device=Renpho&saved=1");
 }
 
 function normalizeKey(s: string): string {
@@ -161,5 +161,5 @@ export async function importRenphoCsv(formData: FormData) {
   await prisma.bodyMetric.createMany({ data: records });
 
   revalidatePath("/");
-  redirect(`/log/renpho?imported=${records.length}`);
+  redirect(`/log/body-composition?device=Renpho&imported=${records.length}`);
 }
