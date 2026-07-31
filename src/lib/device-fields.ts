@@ -30,6 +30,7 @@ export const DEVICE_METRIC_FIELDS: Record<string, DeviceMetricField[]> = {
     { key: "avgHeartRate", label: "Avg heart rate (bpm)", step: "1" },
   ],
   "Apple Health": [{ key: "avgHeartRate", label: "Avg heart rate (bpm)", step: "1" }],
+  "Phone GPS": [],
 };
 
 export const DEVICE_OPTIONS = ["", ...Object.keys(DEVICE_METRIC_FIELDS), "Other"];

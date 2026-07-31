@@ -225,6 +225,7 @@ model Workout {
   distanceKm      Float?
   trackedWith     String?
   metrics         Json?
+  routePoints     Json?
   source          DataSource @default(MANUAL)
   createdAt       DateTime   @default(now())
 

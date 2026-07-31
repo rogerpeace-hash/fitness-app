@@ -64,3 +64,44 @@ export async function createWorkout(formData: FormData) {
   revalidatePath("/");
   redirect("/log/workout?saved=1");
 }
+
+const routePointSchema = z.object({
+  lat: z.number(),
+  lng: z.number(),
+  t: z.number(),
+});
+
+const trackedSchema = z.object({
+  date: z.coerce.date(),
+  type: z.string().min(1),
+  durationMin: z.coerce.number().positive(),
+  distanceKm: z.coerce.number().nonnegative(),
+  routePoints: z.array(routePointSchema).min(2),
+});
+
+export async function saveTrackedWorkout(formData: FormData) {
+  const userId = await requireUserId();
+  const rawRoutePoints = JSON.parse((formData.get("routePoints") as string) || "[]");
+  const parsed = trackedSchema.parse({
+    date: formData.get("date"),
+    type: formData.get("type"),
+    durationMin: formData.get("durationMin"),
+    distanceKm: formData.get("distanceKm"),
+    routePoints: rawRoutePoints,
+  });
+
+  await prisma.workout.create({
+    data: {
+      userId,
+      date: parsed.date,
+      type: parsed.type,
+      durationMin: parsed.durationMin,
+      distanceKm: parsed.distanceKm,
+      trackedWith: "Phone GPS",
+      routePoints: parsed.routePoints,
+    },
+  });
+
+  revalidatePath("/");
+  redirect("/log/workout?saved=1");
+}

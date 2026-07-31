@@ -1,7 +1,10 @@
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { requireUserId } from "@/lib/auth-helpers";
 import { DEVICE_METRIC_FIELDS } from "@/lib/device-fields";
+import type { RoutePoint } from "@/lib/geo";
 import WorkoutForm from "./WorkoutForm";
+import RouteCell from "./RouteCell";
 
 export default async function WorkoutLogPage({
   searchParams,
@@ -37,6 +40,13 @@ export default async function WorkoutLogPage({
         </p>
       )}
 
+      <Link
+        href="/log/workout/track"
+        className="w-fit rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
+      >
+        Record a walk or run with GPS →
+      </Link>
+
       <WorkoutForm />
 
       <div>
@@ -52,6 +62,7 @@ export default async function WorkoutLogPage({
                 <th className="py-2 pr-4">Distance</th>
                 <th className="py-2 pr-4">Device</th>
                 <th className="py-2 pr-4">Metrics</th>
+                <th className="py-2 pr-4">Route</th>
               </tr>
             </thead>
             <tbody>
@@ -61,14 +72,17 @@ export default async function WorkoutLogPage({
                   <td className="py-2 pr-4">{w.type}</td>
                   <td className="py-2 pr-4">{w.durationMin} min</td>
                   <td className="py-2 pr-4">{w.caloriesBurned ?? "—"}</td>
-                  <td className="py-2 pr-4">{w.distanceKm ?? "—"}</td>
+                  <td className="py-2 pr-4">{w.distanceKm !== null ? `${w.distanceKm} km` : "—"}</td>
                   <td className="py-2 pr-4">{w.trackedWith ?? "—"}</td>
                   <td className="py-2 pr-4 text-slate-500">{metricsSummary(w) ?? "—"}</td>
+                  <td className="py-2 pr-4">
+                    {w.routePoints ? <RouteCell points={w.routePoints as unknown as RoutePoint[]} /> : "—"}
+                  </td>
                 </tr>
               ))}
               {workouts.length === 0 && (
                 <tr>
-                  <td colSpan={7} className="py-4 text-slate-500">
+                  <td colSpan={8} className="py-4 text-slate-500">
                     No workouts yet.
                   </td>
                 </tr>
