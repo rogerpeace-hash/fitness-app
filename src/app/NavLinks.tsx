@@ -13,6 +13,7 @@ const navLinks = [
   { href: "/log/body-composition", label: "Body Composition" },
   { href: "/log/bloodwork", label: "Bloodwork" },
   { href: "/goals", label: "Goals" },
+  { href: "/family", label: "Family" },
   { href: "/import", label: "Import" },
 ];
 

@@ -32,6 +32,12 @@ model User {
   chatMessages   ChatMessage[]
   fluidLogs      FluidLog[]
 
+  ownedGroups      Group[]           @relation("GroupOwner")
+  groupMemberships GroupMember[]
+  sharePreferences SharePreference[]
+  reactions        Reaction[]
+  comments         Comment[]
+
   createdAt DateTime @default(now())
 }
 
@@ -336,4 +342,85 @@ model ImportPreset {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, name])
+}
+
+// --- Family / accountability sharing ---
+
+enum ShareCategory {
+  WORKOUT
+  GOAL
+}
+
+enum FeedItemType {
+  WORKOUT
+  GOAL
+}
+
+model Group {
+  id        String   @id @default(cuid())
+  name      String
+  ownerId   String
+  createdAt DateTime @default(now())
+
+  owner            User              @relation("GroupOwner", fields: [ownerId], references: [id], onDelete: Cascade)
+  members          GroupMember[]
+  sharePreferences SharePreference[]
+}
+
+model GroupMember {
+  id       String   @id @default(cuid())
+  groupId  String
+  userId   String
+  joinedAt DateTime @default(now())
+
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([groupId, userId])
+}
+
+// Per-group, per-category opt-in: does this user share this category of
+// data with this specific group? Defaults to off — sharing is always
+// explicit, never implied by group membership alone.
+model SharePreference {
+  id       String        @id @default(cuid())
+  userId   String
+  groupId  String
+  category ShareCategory
+  enabled  Boolean       @default(false)
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, groupId, category])
+}
+
+// Reactions/comments reference a Workout or Goal by id rather than a
+// separate "post" table, so the feed always reflects the same data you see
+// on your own Workout/Goals pages — no duplicated/stale copies.
+model Reaction {
+  id        String       @id @default(cuid())
+  userId    String
+  itemType  FeedItemType
+  itemId    String
+  emoji     String
+  createdAt DateTime     @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, itemType, itemId, emoji])
+  @@index([itemType, itemId])
+}
+
+model Comment {
+  id        String       @id @default(cuid())
+  userId    String
+  itemType  FeedItemType
+  itemId    String
+  body      String
+  createdAt DateTime     @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([itemType, itemId])
 }

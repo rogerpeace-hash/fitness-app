@@ -5,7 +5,7 @@ import { prisma } from "@/lib/prisma";
 
 // ALLOWED_EMAILS is a comma-separated list, e.g. "me@x.com,spouse@x.com".
 // ALLOWED_EMAIL (singular) is kept as a fallback for existing deployments.
-const allowedEmails = (process.env.ALLOWED_EMAILS ?? process.env.ALLOWED_EMAIL ?? "")
+export const allowedEmails = (process.env.ALLOWED_EMAILS ?? process.env.ALLOWED_EMAIL ?? "")
   .split(",")
   .map((e) => e.trim().toLowerCase())
   .filter(Boolean);
