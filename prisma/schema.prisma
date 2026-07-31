@@ -37,6 +37,7 @@ model User {
   sharePreferences SharePreference[]
   reactions        Reaction[]
   comments         Comment[]
+  stravaConnection StravaConnection?
 
   createdAt DateTime @default(now())
 }
@@ -232,6 +233,7 @@ model Workout {
   trackedWith     String?
   metrics         Json?
   routePoints     Json?
+  stravaActivityId String?   @unique
   source          DataSource @default(MANUAL)
   createdAt       DateTime   @default(now())
 
@@ -423,4 +425,19 @@ model Comment {
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([itemType, itemId])
+}
+
+// --- Strava integration ---
+
+model StravaConnection {
+  id           String    @id @default(cuid())
+  userId       String    @unique
+  athleteId    String
+  accessToken  String
+  refreshToken String
+  expiresAt    DateTime
+  lastSyncedAt DateTime?
+  createdAt    DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

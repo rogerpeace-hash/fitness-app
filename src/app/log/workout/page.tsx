@@ -5,20 +5,31 @@ import { DEVICE_METRIC_FIELDS } from "@/lib/device-fields";
 import type { RoutePoint } from "@/lib/geo";
 import WorkoutForm from "./WorkoutForm";
 import RouteCell from "./RouteCell";
+import StravaSection from "./StravaSection";
+
+const STRAVA_ERROR_MESSAGES: Record<string, string> = {
+  denied: "Strava connection was cancelled.",
+  invalid: "Something went wrong connecting to Strava — please try again.",
+  token: "Strava didn't accept that connection — please try again.",
+  sync_failed: "Couldn't sync from Strava — your connection may need to be reconnected.",
+};
 
 export default async function WorkoutLogPage({
   searchParams,
 }: {
-  searchParams: Promise<{ saved?: string }>;
+  searchParams: Promise<{ saved?: string; strava?: string; strava_synced?: string; strava_error?: string }>;
 }) {
   const userId = await requireUserId();
-  const { saved } = await searchParams;
+  const { saved, strava, strava_synced, strava_error } = await searchParams;
 
-  const workouts = await prisma.workout.findMany({
-    where: { userId },
-    orderBy: { date: "desc" },
-    take: 20,
-  });
+  const [workouts, stravaConnection] = await Promise.all([
+    prisma.workout.findMany({
+      where: { userId },
+      orderBy: { date: "desc" },
+      take: 20,
+    }),
+    prisma.stravaConnection.findUnique({ where: { userId } }),
+  ]);
 
   const metricsSummary = (w: (typeof workouts)[number]) => {
     if (!w.trackedWith) return null;
@@ -39,6 +50,21 @@ export default async function WorkoutLogPage({
           Saved.
         </p>
       )}
+      {strava === "connected" && (
+        <p className="rounded-md bg-green-50 px-4 py-2 text-sm text-green-800 dark:bg-green-950 dark:text-green-300">
+          Strava connected! Click &quot;Sync now&quot; below to bring in your activities.
+        </p>
+      )}
+      {strava_synced !== undefined && (
+        <p className="rounded-md bg-green-50 px-4 py-2 text-sm text-green-800 dark:bg-green-950 dark:text-green-300">
+          Synced {strava_synced} activit{strava_synced === "1" ? "y" : "ies"} from Strava.
+        </p>
+      )}
+      {strava_error && (
+        <p className="rounded-md bg-red-50 px-4 py-2 text-sm text-red-800 dark:bg-red-950 dark:text-red-300">
+          {STRAVA_ERROR_MESSAGES[strava_error] ?? "Something went wrong with Strava."}
+        </p>
+      )}
 
       <Link
         href="/log/workout/track"
@@ -46,6 +72,8 @@ export default async function WorkoutLogPage({
       >
         Record a walk or run with GPS →
       </Link>
+
+      <StravaSection connection={stravaConnection} />
 
       <WorkoutForm />
 
