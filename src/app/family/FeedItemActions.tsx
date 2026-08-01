@@ -46,30 +46,30 @@ export default function FeedItemActions({
               title={summary?.userNames.join(", ")}
               className={`rounded-full border px-2.5 py-1 text-sm transition-colors ${
                 mine
-                  ? "border-blue-400 bg-blue-50 dark:border-blue-700 dark:bg-blue-950/50"
-                  : "border-slate-200 hover:bg-slate-50 dark:border-slate-800 dark:hover:bg-slate-800"
+                  ? "border-ignite/40 bg-ignite/15"
+                  : "border-border hover:bg-surface-2"
               }`}
             >
               {emoji}
-              {summary && summary.count > 0 && <span className="ml-1 text-xs text-slate-500">{summary.count}</span>}
+              {summary && summary.count > 0 && <span className="ml-1 text-xs text-dimmer">{summary.count}</span>}
             </button>
           );
         })}
         <button
           type="button"
           onClick={() => setShowComments((s) => !s)}
-          className="ml-1 text-xs text-slate-500 underline"
+          className="ml-1 text-xs text-dim underline"
         >
           {comments.length > 0 ? `${comments.length} comment${comments.length === 1 ? "" : "s"}` : "Comment"}
         </button>
       </div>
 
       {showComments && (
-        <div className="flex flex-col gap-2 border-t border-slate-100 pt-2 dark:border-slate-800">
+        <div className="flex flex-col gap-2 border-t border-border pt-2">
           {comments.map((c) => (
             <div key={c.id} className="text-sm">
               <span className="font-medium">{c.userName}</span>{" "}
-              <span className="text-slate-600 dark:text-slate-400">{c.body}</span>
+              <span className="text-dim">{c.body}</span>
             </div>
           ))}
           <form
@@ -83,11 +83,11 @@ export default function FeedItemActions({
               type="text"
               name="body"
               placeholder="Say something encouraging…"
-              className="flex-1 rounded-md border border-slate-300 px-3 py-1.5 text-sm dark:border-slate-700 dark:bg-slate-900"
+              className="flex-1 rounded-lg border border-border bg-bg px-3 py-1.5 text-sm text-hi focus:border-ignite focus:outline-none"
             />
             <button
               type="submit"
-              className="rounded-md bg-blue-600 px-3 py-1.5 text-sm font-medium text-white hover:bg-blue-700"
+              className="rounded-lg bg-ignite px-3 py-1.5 text-sm font-bold text-ignite-fg hover:bg-ignite-hover"
             >
               Post
             </button>

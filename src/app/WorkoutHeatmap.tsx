@@ -1,9 +1,9 @@
 import type { HeatmapDay } from "@/lib/workout-status";
 
 function colorFor(count: number) {
-  if (count <= 0) return "bg-slate-100 dark:bg-slate-800";
-  if (count === 1) return "bg-green-400 dark:bg-green-600";
-  return "bg-green-700 dark:bg-green-400";
+  if (count <= 0) return "bg-surface-2";
+  if (count === 1) return "bg-ignite/50";
+  return "bg-ignite";
 }
 
 export default function WorkoutHeatmap({ days }: { days: HeatmapDay[] }) {

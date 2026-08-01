@@ -17,7 +17,7 @@ export default function WorkoutForm() {
           name="date"
           required
           defaultValue={new Date().toISOString().slice(0, 10)}
-          className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+          className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
         />
       </label>
       <label className="flex flex-col gap-1 text-sm">
@@ -27,7 +27,7 @@ export default function WorkoutForm() {
           name="type"
           required
           placeholder="e.g. Run, Lift, Yoga"
-          className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+          className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
         />
       </label>
       <label className="flex flex-col gap-1 text-sm">
@@ -37,7 +37,7 @@ export default function WorkoutForm() {
           step="1"
           name="durationMin"
           required
-          className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+          className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
         />
       </label>
       <label className="flex flex-col gap-1 text-sm">
@@ -46,7 +46,7 @@ export default function WorkoutForm() {
           type="number"
           step="1"
           name="caloriesBurned"
-          className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+          className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
         />
       </label>
       <label className="flex flex-col gap-1 text-sm">
@@ -55,7 +55,7 @@ export default function WorkoutForm() {
           type="number"
           step="0.01"
           name="distanceKm"
-          className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+          className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
         />
       </label>
       <label className="flex flex-col gap-1 text-sm">
@@ -64,7 +64,7 @@ export default function WorkoutForm() {
           name="trackedWith"
           value={device}
           onChange={(e) => setDevice(e.target.value)}
-          className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+          className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
         >
           {DEVICE_OPTIONS.map((option) => (
             <option key={option || "none"} value={option}>
@@ -75,7 +75,7 @@ export default function WorkoutForm() {
       </label>
 
       {metricFields.length > 0 && (
-        <div className="col-span-2 grid grid-cols-2 gap-4 rounded-md border border-slate-200 p-3 dark:border-slate-800">
+        <div className="col-span-2 grid grid-cols-2 gap-4 rounded-lg border border-border p-3">
           {metricFields.map((field) => (
             <label key={field.key} className="flex flex-col gap-1 text-sm">
               {field.label}
@@ -83,7 +83,7 @@ export default function WorkoutForm() {
                 type="number"
                 step={field.step ?? "1"}
                 name={`metric_${field.key}`}
-                className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+                className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
               />
             </label>
           ))}
@@ -92,7 +92,7 @@ export default function WorkoutForm() {
 
       <button
         type="submit"
-        className="col-span-2 w-fit rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
+        className="col-span-2 w-fit rounded-lg bg-ignite px-4 py-2 text-sm font-bold text-ignite-fg hover:bg-ignite-hover"
       >
         Save workout
       </button>

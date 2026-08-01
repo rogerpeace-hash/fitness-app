@@ -19,16 +19,16 @@ export default function FluidSection({
 
   return (
     <div className="flex flex-col gap-4">
-      <h2 className="text-lg font-medium">Fluid Intake</h2>
+      <h2 className="font-display text-lg font-bold uppercase tracking-wide text-hi">Fluid Intake</h2>
 
-      <div className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <div className="rounded-2xl border border-border bg-surface p-4">
         <div className="mb-4 flex items-baseline gap-2">
-          <span className="text-2xl font-bold text-slate-900 dark:text-white">
+          <span className="font-display text-3xl font-extrabold uppercase tracking-wide text-hi">
             {totalOzToday.toFixed(0)} oz
           </span>
-          <span className="text-sm text-slate-500">today</span>
+          <span className="text-sm text-dim">today</span>
           {Object.keys(byType).length > 0 && (
-            <span className="text-sm text-slate-500">
+            <span className="text-sm text-dim">
               ({Object.entries(byType).map(([type, oz]) => `${type} ${oz.toFixed(0)}`).join(" · ")})
             </span>
           )}
@@ -41,7 +41,7 @@ export default function FluidSection({
             <select
               name="drinkType"
               defaultValue="Water"
-              className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+              className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
             >
               {DRINK_TYPES.map((type) => (
                 <option key={type} value={type}>
@@ -58,24 +58,24 @@ export default function FluidSection({
               name="amountOz"
               required
               defaultValue={8}
-              className="w-24 rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+              className="w-24 rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
             />
           </label>
           <button
             type="submit"
-            className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
+            className="rounded-lg bg-ignite px-4 py-2 text-sm font-bold text-ignite-fg hover:bg-ignite-hover"
           >
             Add
           </button>
         </form>
-        <p className="mt-2 text-xs text-slate-500">Quick amounts: {QUICK_AMOUNTS.join(", ")} oz</p>
+        <p className="mt-2 text-xs text-dimmer">Quick amounts: {QUICK_AMOUNTS.join(", ")} oz</p>
       </div>
 
       {recentFluids.length > 0 && (
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-200 text-left dark:border-slate-800">
+              <tr className="border-b border-border text-left">
                 <th className="py-2 pr-4">Date</th>
                 <th className="py-2 pr-4">Drink</th>
                 <th className="py-2 pr-4">Amount</th>
@@ -84,13 +84,13 @@ export default function FluidSection({
             </thead>
             <tbody>
               {recentFluids.map((f) => (
-                <tr key={f.id} className="border-b border-slate-100 dark:border-slate-900">
+                <tr key={f.id} className="border-b border-border">
                   <td className="py-2 pr-4">{f.date.toISOString().slice(0, 10)}</td>
                   <td className="py-2 pr-4">{f.drinkType}</td>
                   <td className="py-2 pr-4">{f.amountOz} oz</td>
                   <td className="py-2 pr-4">
                     <form action={deleteFluidLog.bind(null, f.id)}>
-                      <button type="submit" className="text-xs text-red-600 underline dark:text-red-400">
+                      <button type="submit" className="text-xs text-red-400 hover:text-red-300">
                         Delete
                       </button>
                     </form>

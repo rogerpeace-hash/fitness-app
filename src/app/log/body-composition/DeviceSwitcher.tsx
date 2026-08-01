@@ -20,7 +20,7 @@ export default function DeviceSwitcher({
         <select
           value={device}
           onChange={(e) => setDevice(e.target.value as "InBody" | "Renpho")}
-          className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+          className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
         >
           <option value="InBody">InBody</option>
           <option value="Renpho">Renpho</option>

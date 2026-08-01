@@ -19,10 +19,10 @@ export default async function BloodworkLogPage({
 
   return (
     <div className="flex flex-col gap-8">
-      <h1 className="text-2xl font-semibold">Bloodwork</h1>
+      <h1 className="font-display text-3xl font-extrabold uppercase tracking-wide text-hi">Bloodwork</h1>
 
       {saved && (
-        <p className="rounded-md bg-green-50 px-4 py-2 text-sm text-green-800 dark:bg-green-950 dark:text-green-300">
+        <p className="rounded-lg border border-surge/30 bg-surge/10 px-4 py-2 text-sm text-surge">
           Saved.
         </p>
       )}
@@ -30,22 +30,22 @@ export default async function BloodworkLogPage({
       <BloodworkForm />
 
       <div>
-        <h2 className="mb-3 text-lg font-medium">Recent panels</h2>
+        <h2 className="mb-3 font-display text-lg font-bold uppercase tracking-wide text-hi">Recent panels</h2>
         <div className="flex flex-col gap-6">
           {panels.map((panel) => (
             <div
               key={panel.id}
-              className="rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+              className="rounded-2xl border border-border bg-surface p-4"
             >
               <div className="mb-2 flex items-baseline gap-3">
                 <span className="font-medium">{panel.date.toISOString().slice(0, 10)}</span>
                 {panel.labName && (
-                  <span className="text-sm text-slate-500">{panel.labName}</span>
+                  <span className="text-sm text-dim">{panel.labName}</span>
                 )}
               </div>
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-slate-200 text-left dark:border-slate-800">
+                  <tr className="border-b border-border text-left">
                     <th className="py-1 pr-4">Marker</th>
                     <th className="py-1 pr-4">Value</th>
                     <th className="py-1 pr-4">Unit</th>
@@ -58,9 +58,9 @@ export default async function BloodworkLogPage({
                       (marker.refLow !== null && marker.value < marker.refLow) ||
                       (marker.refHigh !== null && marker.value > marker.refHigh);
                     return (
-                      <tr key={marker.id} className="border-b border-slate-100 dark:border-slate-900">
+                      <tr key={marker.id} className="border-b border-border">
                         <td className="py-1 pr-4">{marker.name}</td>
-                        <td className={`py-1 pr-4 ${outOfRange ? "font-semibold text-red-600 dark:text-red-400" : ""}`}>
+                        <td className={`py-1 pr-4 ${outOfRange ? "font-semibold text-red-400" : ""}`}>
                           {marker.value}
                         </td>
                         <td className="py-1 pr-4">{marker.unit ?? "—"}</td>
@@ -74,7 +74,7 @@ export default async function BloodworkLogPage({
               </table>
             </div>
           ))}
-          {panels.length === 0 && <p className="text-slate-500">No panels yet.</p>}
+          {panels.length === 0 && <p className="text-dim">No panels yet.</p>}
         </div>
       </div>
     </div>

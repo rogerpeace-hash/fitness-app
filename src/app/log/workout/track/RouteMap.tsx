@@ -32,7 +32,7 @@ export default function RouteMap({
     return (
       <div
         style={{ height }}
-        className="flex items-center justify-center rounded-md bg-slate-100 text-sm text-slate-500 dark:bg-slate-800"
+        className="flex items-center justify-center rounded-lg bg-surface-2 text-sm text-dim"
       >
         Waiting for GPS signal…
       </div>
@@ -51,8 +51,8 @@ export default function RouteMap({
       scrollWheelZoom={!live}
     >
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
       />
       {plannedRoute && plannedRoute.length > 0 && (
         <Polyline
@@ -60,26 +60,26 @@ export default function RouteMap({
           pathOptions={{ color: "#94a3b8", weight: 4, dashArray: "6 8" }}
         />
       )}
-      {hasTraveled && <Polyline positions={latlngs} pathOptions={{ color: "#2563eb", weight: 4 }} />}
+      {hasTraveled && <Polyline positions={latlngs} pathOptions={{ color: "#ff7333", weight: 4 }} />}
       {hasTraveled && (
         <CircleMarker
           center={latlngs[0]}
           radius={6}
-          pathOptions={{ color: "#16a34a", fillColor: "#16a34a", fillOpacity: 1 }}
+          pathOptions={{ color: "#5be479", fillColor: "#5be479", fillOpacity: 1 }}
         />
       )}
       {hasTraveled && (
         <CircleMarker
           center={latlngs[latlngs.length - 1]}
           radius={6}
-          pathOptions={{ color: "#dc2626", fillColor: "#dc2626", fillOpacity: 1 }}
+          pathOptions={{ color: "#ff7333", fillColor: "#ff7333", fillOpacity: 1 }}
         />
       )}
       {destination && (
         <CircleMarker
           center={[destination.lat, destination.lng]}
           radius={8}
-          pathOptions={{ color: "#dc2626", fillColor: "#ffffff", fillOpacity: 1, weight: 3 }}
+          pathOptions={{ color: "#6ab3fd", fillColor: "#111826", fillOpacity: 1, weight: 3 }}
         />
       )}
       {live && hasTraveled && <RecenterOnChange center={last} />}

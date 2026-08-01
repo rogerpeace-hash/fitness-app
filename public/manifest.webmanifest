@@ -1,11 +1,11 @@
 {
-  "name": "Health Tracker",
-  "short_name": "Health",
-  "description": "Personal health data dashboard",
+  "name": "Stride",
+  "short_name": "Stride",
+  "description": "Family fitness tracker — workouts, goals, streaks, and momentum",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0f172a",
-  "theme_color": "#0f172a",
+  "background_color": "#070d18",
+  "theme_color": "#070d18",
   "icons": [
     {
       "src": "/icon-192.png",

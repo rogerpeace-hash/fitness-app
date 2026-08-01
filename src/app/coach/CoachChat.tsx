@@ -71,7 +71,7 @@ export default function CoachChat({ initialMessages }: { initialMessages: Messag
               key={prompt}
               type="button"
               onClick={() => sendMessage(prompt)}
-              className="rounded-full border border-slate-300 px-3 py-1.5 text-sm text-slate-600 hover:border-blue-600 hover:text-blue-600 dark:border-slate-700 dark:text-slate-400 dark:hover:border-blue-400 dark:hover:text-blue-400"
+              className="rounded-full border border-border px-3 py-1.5 text-sm text-dim hover:border-ignite hover:text-ignite"
             >
               {prompt}
             </button>
@@ -79,9 +79,9 @@ export default function CoachChat({ initialMessages }: { initialMessages: Messag
         </div>
       )}
 
-      <div className="flex min-h-[300px] flex-col gap-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+      <div className="flex min-h-[300px] flex-col gap-4 rounded-2xl border border-border bg-surface p-4">
         {messages.length === 0 && (
-          <p className="text-sm text-slate-500">
+          <p className="text-sm text-dim">
             Ask about your trends — what to work on, how you're tracking toward goals, or
             nutrition ideas based on your logs.
           </p>
@@ -91,8 +91,8 @@ export default function CoachChat({ initialMessages }: { initialMessages: Messag
             <div
               className={`inline-block max-w-lg rounded-lg px-3 py-2 text-sm ${
                 m.role === "user"
-                  ? "bg-blue-600 text-white dark:bg-blue-500 dark:text-white"
-                  : "bg-slate-100 text-slate-800 dark:bg-slate-800 dark:text-slate-100"
+                  ? "bg-ignite text-ignite-fg"
+                  : "bg-surface-2 text-hi"
               }`}
             >
               {m.role === "assistant" ? (
@@ -112,7 +112,7 @@ export default function CoachChat({ initialMessages }: { initialMessages: Messag
         <div ref={bottomRef} />
       </div>
 
-      {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+      {error && <p className="text-sm text-red-400">{error}</p>}
 
       <form
         onSubmit={(e) => {
@@ -127,12 +127,12 @@ export default function CoachChat({ initialMessages }: { initialMessages: Messag
           onChange={(e) => setInput(e.target.value)}
           placeholder="Ask the coach..."
           disabled={isStreaming}
-          className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900"
+          className="flex-1 rounded-lg border border-border bg-bg px-3 py-2 text-sm text-hi focus:border-ignite focus:outline-none"
         />
         <button
           type="submit"
           disabled={isStreaming || !input.trim()}
-          className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 disabled:opacity-40 dark:bg-blue-500 dark:text-white"
+          className="rounded-lg bg-ignite px-4 py-2 text-sm font-bold text-ignite-fg hover:bg-ignite-hover disabled:opacity-40"
         >
           Send
         </button>
@@ -145,7 +145,7 @@ export default function CoachChat({ initialMessages }: { initialMessages: Messag
             await clearChat();
             setMessages([]);
           }}
-          className="w-fit text-xs text-slate-500 underline hover:text-blue-600 dark:hover:text-blue-400"
+          className="w-fit text-xs text-dim hover:text-ignite"
         >
           Clear chat
         </button>

@@ -8,8 +8,8 @@ export default async function TrackWorkoutPage() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-semibold">Record a walk or run</h1>
-        <Link href="/log/workout" className="text-sm text-slate-500 underline hover:text-blue-600 dark:hover:text-blue-400">
+        <h1 className="font-display text-3xl font-extrabold uppercase tracking-wide text-hi">Record a walk or run</h1>
+        <Link href="/log/workout" className="text-sm text-dim hover:text-ignite">
           Back to workouts
         </Link>
       </div>

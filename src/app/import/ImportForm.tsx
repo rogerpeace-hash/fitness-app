@@ -55,7 +55,7 @@ export default function ImportForm({ presets }: { presets: Preset[] }) {
             setDataType(e.target.value as ImportDataType);
             setMapping({});
           }}
-          className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+          className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
         >
           {Object.entries(IMPORT_DATA_TYPE_LABELS).map(([value, label]) => (
             <option key={value} value={value}>
@@ -73,7 +73,7 @@ export default function ImportForm({ presets }: { presets: Preset[] }) {
           accept=".csv,text/csv,text/comma-separated-values,application/vnd.ms-excel,application/csv,text/plain"
           required
           onChange={(e) => handleFile(e.target.files?.[0])}
-          className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+          className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
         />
       </label>
 
@@ -86,7 +86,7 @@ export default function ImportForm({ presets }: { presets: Preset[] }) {
               const preset = matchingPresets.find((p) => p.id === e.target.value);
               if (preset) applyPreset(preset);
             }}
-            className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+            className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
           >
             <option value="">-- none --</option>
             {matchingPresets.map((p) => (
@@ -114,7 +114,7 @@ export default function ImportForm({ presets }: { presets: Preset[] }) {
                 onChange={(e) =>
                   setMapping((m) => ({ ...m, [field.key]: e.target.value }))
                 }
-                className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+                className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
               >
                 <option value="">-- none --</option>
                 {headers.map((h) => (
@@ -136,14 +136,14 @@ export default function ImportForm({ presets }: { presets: Preset[] }) {
           value={presetName}
           onChange={(e) => setPresetName(e.target.value)}
           placeholder="e.g. MyFitnessPal Nutrition Export"
-          className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+          className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
         />
       </label>
 
       <button
         type="submit"
         disabled={!headers}
-        className="w-fit rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700 disabled:opacity-40"
+        className="w-fit rounded-lg bg-ignite px-4 py-2 text-sm font-bold text-ignite-fg hover:bg-ignite-hover disabled:opacity-40"
       >
         Import
       </button>

@@ -31,26 +31,26 @@ export default function PlannerMap({
       className="z-0 rounded-md"
     >
       <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>'
+        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
       />
       <ClickHandler onPick={onPick} />
       <CircleMarker
         center={[origin.lat, origin.lng]}
         radius={7}
-        pathOptions={{ color: "#16a34a", fillColor: "#16a34a", fillOpacity: 1 }}
+        pathOptions={{ color: "#5be479", fillColor: "#5be479", fillOpacity: 1 }}
       />
       {destination && (
         <CircleMarker
           center={[destination.lat, destination.lng]}
           radius={7}
-          pathOptions={{ color: "#dc2626", fillColor: "#dc2626", fillOpacity: 1 }}
+          pathOptions={{ color: "#6ab3fd", fillColor: "#6ab3fd", fillOpacity: 1 }}
         />
       )}
       {routeCoords && routeCoords.length > 0 && (
         <Polyline
           positions={routeCoords.map((p): [number, number] => [p.lat, p.lng])}
-          pathOptions={{ color: "#2563eb", weight: 4, dashArray: "6 6" }}
+          pathOptions={{ color: "#ff7333", weight: 4, dashArray: "6 6" }}
         />
       )}
     </MapContainer>

@@ -17,8 +17,8 @@ export default async function ImportPage({
 
   return (
     <div className="flex flex-col gap-8">
-      <h1 className="text-2xl font-semibold">Import data</h1>
-      <p className="max-w-2xl text-sm text-slate-600 dark:text-slate-400">
+      <h1 className="font-display text-3xl font-extrabold uppercase tracking-wide text-hi">Import data</h1>
+      <p className="max-w-2xl text-sm text-dim">
         Upload a CSV export (e.g. MyFitnessPal Nutrition export, or a workout/steps
         CSV from an Apple Health export tool), pick what kind of data it contains,
         then map its columns to the fields below. You can save the mapping as a
@@ -26,7 +26,7 @@ export default async function ImportPage({
       </p>
 
       {imported !== undefined && (
-        <p className="rounded-md bg-green-50 px-4 py-2 text-sm text-green-800 dark:bg-green-950 dark:text-green-300">
+        <p className="rounded-lg border border-surge/30 bg-surge/10 px-4 py-2 text-sm text-surge">
           Imported {imported} row{imported === "1" ? "" : "s"}
           {skipped && Number(skipped) > 0 ? ` (skipped ${skipped} invalid row${skipped === "1" ? "" : "s"})` : ""}.
         </p>

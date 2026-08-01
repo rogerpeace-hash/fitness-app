@@ -11,7 +11,7 @@ export default function RouteCell({ points }: { points: RoutePoint[] }) {
 
   return (
     <div>
-      <button type="button" onClick={() => setOpen((o) => !o)} className="text-xs text-blue-600 underline dark:text-blue-400">
+      <button type="button" onClick={() => setOpen((o) => !o)} className="text-xs text-ignite hover:text-ignite-hover">
         {open ? "Hide map" : "View map"}
       </button>
       {open && (

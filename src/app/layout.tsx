@@ -1,24 +1,26 @@
 import type { Metadata, Viewport } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Barlow_Condensed, Inter } from "next/font/google";
 import Image from "next/image";
 import { auth, signOut } from "@/auth";
 import DailyVerseModal from "./DailyVerseModal";
 import NavLinks from "./NavLinks";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const barlowCondensed = Barlow_Condensed({
+  variable: "--font-barlow-condensed",
   subsets: ["latin"],
+  weight: ["600", "700", "800", "900"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800"],
 });
 
 export const metadata: Metadata = {
-  title: "Health Tracker",
-  description: "Personal health data dashboard",
+  title: "Stride",
+  description: "Family fitness tracker — workouts, goals, streaks, and momentum",
   manifest: "/manifest.webmanifest",
   icons: {
     icon: "/icon-192.png",
@@ -26,13 +28,13 @@ export const metadata: Metadata = {
   },
   appleWebApp: {
     capable: true,
-    statusBarStyle: "default",
-    title: "Health Tracker",
+    statusBarStyle: "black-translucent",
+    title: "Stride",
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0f172a",
+  themeColor: "#070d18",
 };
 
 export default async function RootLayout({
@@ -45,34 +47,38 @@ export default async function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${barlowCondensed.variable} ${inter.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-slate-50 dark:bg-slate-950">
+      <body className="min-h-full flex flex-col bg-bg font-sans">
         {session?.user && <DailyVerseModal />}
         {session?.user && (
-          <header className="border-b border-blue-950/40 bg-gradient-to-r from-slate-900 via-slate-900 to-blue-950 shadow-md">
-            <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-6 py-3">
-              <div className="flex flex-wrap items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <Image src="/icon-192.png" alt="" width={28} height={28} className="rounded-md" />
-                  <span className="font-semibold tracking-tight text-white">Health Tracker</span>
-                </div>
-                <NavLinks />
+          <header className="sticky top-0 z-40 border-b border-border bg-surface">
+            <div className="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-3 px-5 py-3">
+              <div className="flex items-center gap-2">
+                <Image src="/icon-192.png" alt="" width={30} height={30} className="rounded-lg" />
+                <span className="font-display text-xl font-extrabold uppercase tracking-wide text-hi">
+                  Stride
+                </span>
               </div>
-              <form
-                action={async () => {
-                  "use server";
-                  await signOut({ redirectTo: "/sign-in" });
-                }}
-              >
-                <button type="submit" className="text-sm text-slate-400 hover:text-blue-300">
-                  Sign out
-                </button>
-              </form>
+              <div className="flex items-center gap-4">
+                <form
+                  action={async () => {
+                    "use server";
+                    await signOut({ redirectTo: "/sign-in" });
+                  }}
+                >
+                  <button type="submit" className="text-sm font-medium text-dim hover:text-hi">
+                    Sign out
+                  </button>
+                </form>
+              </div>
+            </div>
+            <div className="mx-auto max-w-5xl px-5 pb-3">
+              <NavLinks />
             </div>
           </header>
         )}
-        <div className="mx-auto w-full max-w-5xl flex-1 px-6 py-8">
+        <div className="mx-auto w-full max-w-5xl flex-1 px-5 py-8">
           {children}
         </div>
       </body>

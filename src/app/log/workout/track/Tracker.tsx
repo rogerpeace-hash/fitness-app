@@ -15,14 +15,14 @@ import {
 const RouteMap = dynamic(() => import("./RouteMap"), {
   ssr: false,
   loading: () => (
-    <div style={{ height: 300 }} className="animate-pulse rounded-md bg-slate-100 dark:bg-slate-800" />
+    <div style={{ height: 300 }} className="animate-pulse rounded-lg bg-surface-2" />
   ),
 });
 
 const PlannerMap = dynamic(() => import("./PlannerMap"), {
   ssr: false,
   loading: () => (
-    <div style={{ height: 280 }} className="animate-pulse rounded-md bg-slate-100 dark:bg-slate-800" />
+    <div style={{ height: 280 }} className="animate-pulse rounded-lg bg-surface-2" />
   ),
 });
 
@@ -252,8 +252,8 @@ export default function Tracker() {
 
   if (status === "idle") {
     return (
-      <div className="flex flex-col gap-4 rounded-lg border border-slate-200 bg-white p-6 shadow-sm dark:border-slate-800 dark:bg-slate-900">
-        <p className="text-sm text-slate-500">
+      <div className="flex flex-col gap-4 rounded-2xl border border-border bg-surface p-6">
+        <p className="text-sm text-dim">
           Uses your phone&apos;s GPS to draw the route and calculate distance and pace. Keep this
           page open and your screen on while recording — the browser stops tracking if you switch
           apps or lock your phone. Music from Spotify or Apple Music keeps playing fine in the
@@ -268,23 +268,23 @@ export default function Tracker() {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search for a destination…"
-              className="flex-1 rounded-md border border-slate-300 px-3 py-2 text-sm dark:border-slate-700 dark:bg-slate-900"
+              className="flex-1 rounded-lg border border-border bg-bg px-3 py-2 text-sm text-hi focus:border-ignite focus:outline-none"
             />
             <button
               type="submit"
-              className="rounded-md bg-slate-200 px-3 py-2 text-sm font-medium text-slate-800 hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-100"
+              className="rounded-lg border border-border bg-surface-2 px-3 py-2 text-sm font-semibold text-hi hover:bg-border"
             >
               Search
             </button>
           </form>
           {searchResults.length > 0 && (
-            <ul className="flex flex-col gap-1 rounded-md border border-slate-200 dark:border-slate-800">
+            <ul className="flex flex-col gap-1 rounded-lg border border-border">
               {searchResults.map((r, i) => (
                 <li key={i}>
                   <button
                     type="button"
                     onClick={() => planRouteTo({ lat: r.lat, lng: r.lng })}
-                    className="w-full truncate px-3 py-2 text-left text-sm hover:bg-slate-50 dark:hover:bg-slate-800"
+                    className="w-full truncate px-3 py-2 text-left text-sm text-hi hover:bg-surface-2"
                   >
                     {r.label}
                   </button>
@@ -292,7 +292,7 @@ export default function Tracker() {
               ))}
             </ul>
           )}
-          <p className="text-xs text-slate-500">…or tap the map to drop a pin.</p>
+          <p className="text-xs text-dimmer">…or tap the map to drop a pin.</p>
 
           {origin ? (
             <PlannerMap
@@ -304,30 +304,30 @@ export default function Tracker() {
           ) : (
             <div
               style={{ height: 280 }}
-              className="flex items-center justify-center rounded-md bg-slate-100 text-sm text-slate-500 dark:bg-slate-800"
+              className="flex items-center justify-center rounded-lg bg-surface-2 text-sm text-dim"
             >
               Locating you…
             </div>
           )}
 
-          {routeLoading && <p className="text-sm text-slate-500">Getting directions…</p>}
-          {routeError && <p className="text-sm text-red-600 dark:text-red-400">{routeError}</p>}
+          {routeLoading && <p className="text-sm text-dim">Getting directions…</p>}
+          {routeError && <p className="text-sm text-red-400">{routeError}</p>}
           {plannedDistanceKm !== null && (
             <div className="flex items-center justify-between">
-              <p className="text-sm text-slate-600 dark:text-slate-400">
+              <p className="text-sm text-dim">
                 Planned route: <span className="font-semibold">{plannedDistanceKm.toFixed(2)} km</span>
               </p>
-              <button type="button" onClick={clearDestination} className="text-xs text-slate-500 underline">
+              <button type="button" onClick={clearDestination} className="text-xs text-dim underline">
                 Clear destination
               </button>
             </div>
           )}
         </div>
 
-        {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+        {error && <p className="text-sm text-red-400">{error}</p>}
         <button
           onClick={handleStart}
-          className="self-center rounded-full bg-blue-600 px-8 py-3 text-lg font-semibold text-white shadow-sm hover:bg-blue-700"
+          className="self-center rounded-full bg-ignite px-8 py-3 text-lg font-bold text-ignite-fg hover:bg-ignite-hover"
         >
           Start recording
         </button>
@@ -344,7 +344,7 @@ export default function Tracker() {
           <Stat label="Distance" value={`${distanceKm.toFixed(2)} km`} />
           <Stat label="Pace" value={formatPaceMinKm(durationMin, distanceKm)} />
         </div>
-        <form action={saveTrackedWorkout} className="flex flex-col gap-4 rounded-lg border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+        <form action={saveTrackedWorkout} className="flex flex-col gap-4 rounded-2xl border border-border bg-surface p-4">
           <input type="hidden" name="date" value={new Date().toISOString().slice(0, 10)} />
           <input type="hidden" name="durationMin" value={durationMin.toFixed(2)} />
           <input type="hidden" name="distanceKm" value={distanceKm.toFixed(3)} />
@@ -354,7 +354,7 @@ export default function Tracker() {
             <select
               name="type"
               defaultValue="Run"
-              className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+              className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
             >
               <option value="Run">Run</option>
               <option value="Walk">Walk</option>
@@ -364,14 +364,14 @@ export default function Tracker() {
           <div className="flex gap-3">
             <button
               type="submit"
-              className="rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
+              className="rounded-lg bg-ignite px-4 py-2 text-sm font-bold text-ignite-fg hover:bg-ignite-hover"
             >
               Save workout
             </button>
             <button
               type="button"
               onClick={handleDiscard}
-              className="rounded-md px-4 py-2 text-sm text-slate-500 underline"
+              className="rounded-md px-4 py-2 text-sm text-dim underline"
             >
               Discard
             </button>
@@ -399,26 +399,26 @@ export default function Tracker() {
         <Stat label="Pace" value={formatPaceMinKm(durationMin, distanceKm)} />
       </div>
 
-      {error && <p className="text-sm text-red-600 dark:text-red-400">{error}</p>}
+      {error && <p className="text-sm text-red-400">{error}</p>}
       <div className="flex justify-center gap-3">
         {status === "recording" ? (
           <button
             onClick={handlePause}
-            className="rounded-full bg-slate-200 px-6 py-3 font-semibold text-slate-800 shadow-sm hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-100"
+            className="rounded-full border border-border bg-surface-2 px-6 py-3 font-bold text-hi hover:bg-border"
           >
             Pause
           </button>
         ) : (
           <button
             onClick={handleResume}
-            className="rounded-full bg-slate-200 px-6 py-3 font-semibold text-slate-800 shadow-sm hover:bg-slate-300 dark:bg-slate-800 dark:text-slate-100"
+            className="rounded-full border border-border bg-surface-2 px-6 py-3 font-bold text-hi hover:bg-border"
           >
             Resume
           </button>
         )}
         <button
           onClick={handleFinish}
-          className="rounded-full bg-red-600 px-6 py-3 font-semibold text-white shadow-sm hover:bg-red-700"
+          className="rounded-full bg-red-500 px-6 py-3 font-bold text-white shadow-sm hover:bg-red-600"
         >
           Finish
         </button>
@@ -429,18 +429,18 @@ export default function Tracker() {
 
 function Stat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-3 text-center dark:border-slate-800 dark:bg-slate-900">
-      <p className="text-xs uppercase tracking-wide text-slate-500">{label}</p>
-      <p className="text-lg font-semibold text-slate-900 dark:text-white">{value}</p>
+    <div className="rounded-2xl border border-border bg-surface p-3 text-center">
+      <p className="text-xs font-semibold uppercase tracking-wide text-dimmer">{label}</p>
+      <p className="font-display text-lg font-bold text-hi">{value}</p>
     </div>
   );
 }
 
 function HeroStat({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-lg border border-blue-200 bg-blue-50 p-4 text-center dark:border-blue-900 dark:bg-blue-950/40">
-      <p className="text-xs font-medium uppercase tracking-wide text-blue-700 dark:text-blue-300">{label}</p>
-      <p className="text-3xl font-bold text-blue-900 dark:text-blue-100">{value}</p>
+    <div className="rounded-2xl border border-ignite/30 bg-ignite/10 p-4 text-center">
+      <p className="text-xs font-semibold uppercase tracking-wide text-ignite-hover">{label}</p>
+      <p className="font-display text-3xl font-extrabold text-ignite-hover">{value}</p>
     </div>
   );
 }

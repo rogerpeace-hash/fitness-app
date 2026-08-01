@@ -32,7 +32,7 @@ export default function GoalForm() {
           required
           value={type}
           onChange={(e) => setType(e.target.value as GoalType)}
-          className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+          className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
         >
           <option value="WEIGHT">Weight</option>
           <option value="BODY_FAT">Body fat %</option>
@@ -49,7 +49,7 @@ export default function GoalForm() {
             <select
               value={exercise}
               onChange={(e) => setExercise(e.target.value)}
-              className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+              className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
             >
               {EXERCISE_PRESETS.map((ex) => (
                 <option key={ex} value={ex}>
@@ -67,7 +67,7 @@ export default function GoalForm() {
                 value={customExercise}
                 onChange={(e) => setCustomExercise(e.target.value)}
                 placeholder="e.g. Muscle-ups"
-                className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+                className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
               />
             </label>
           ) : (
@@ -86,7 +86,7 @@ export default function GoalForm() {
               step={isRepsGoal ? "1" : "0.1"}
               name="startValue"
               required
-              className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+              className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
             />
           </label>
           <label className="flex flex-col gap-1 text-sm">
@@ -96,7 +96,7 @@ export default function GoalForm() {
               name="startDate"
               required
               defaultValue={new Date().toISOString().slice(0, 10)}
-              className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+              className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
             />
           </label>
         </>
@@ -110,7 +110,7 @@ export default function GoalForm() {
           min={isFrequencyGoal ? "1" : undefined}
           name="targetValue"
           required
-          className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+          className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
         />
       </label>
       {!isFrequencyGoal && (
@@ -120,7 +120,7 @@ export default function GoalForm() {
             type="date"
             name="targetDate"
             required={isRepsGoal}
-            className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+            className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
           />
         </label>
       )}
@@ -130,12 +130,12 @@ export default function GoalForm() {
         <textarea
           name="notes"
           rows={2}
-          className="rounded-md border border-slate-300 px-3 py-2 dark:border-slate-700 dark:bg-slate-900"
+          className="rounded-lg border border-border bg-bg px-3 py-2 text-hi focus:border-ignite focus:outline-none"
         />
       </label>
       <button
         type="submit"
-        className="col-span-2 w-fit rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-blue-700"
+        className="col-span-2 w-fit rounded-lg bg-ignite px-4 py-2 text-sm font-bold text-ignite-fg hover:bg-ignite-hover"
       >
         Add goal
       </button>
